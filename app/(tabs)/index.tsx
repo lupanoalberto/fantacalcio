@@ -6,6 +6,7 @@ import { useTheme } from "../theme";
 import Header from "../../components/Header";
 import LeagueCard from "../../components/LeagueCard";
 import LiveMatchesSection from "../../components/LiveMatchesSection";
+import NewsCarousel from "../../components/NewsCarousel";
 
 export default function HomeTab() {
   const { colors, fonts } = useTheme();
@@ -26,8 +27,6 @@ export default function HomeTab() {
       <Header
         title="Fantacalcio"
         showBackArrow={false}
-        onPressNotifications={() => Alert.alert("Notifiche", "Funzionalità in arrivo!")}
-        onPressShare={() => Alert.alert("Condividi", "Presto potrai condividere la tua lega!")}
       />
 
 
@@ -78,6 +77,11 @@ export default function HomeTab() {
         <View style={{ marginTop: 20 }}>
           <LiveMatchesSection />
         </View>
+
+        <View style={{ marginTop: 20 }}>
+          <NewsCarousel />
+        </View>
+          
       </ScrollView>
     </View>
   );
@@ -85,14 +89,14 @@ export default function HomeTab() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  scrollContent: { paddingTop: 40, paddingHorizontal: 20, paddingBottom: 60 },
+  scrollContent: { paddingTop: 40, paddingHorizontal: 16, paddingBottom: 60 },
   title: { fontSize: 26, marginBottom: 4, textAlign: "center" },
-  subtitle: { fontSize: 14, textAlign: "center", marginBottom: 40 },
+  subtitle: { fontSize: 13, textAlign: "center", marginBottom: 40 },
   section: { width: "100%" },
   sectionTitle: { fontSize: 18, marginBottom: 16 },
   addButton: {
-    marginTop: 10,
-    paddingVertical: 12,
+    marginTop: 8,
+    paddingVertical: 8,
     borderWidth: 1,
     borderRadius: 8,
     alignItems: "center",
@@ -100,5 +104,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 8,
   },
-  addButtonText: { fontSize: 14 },
+  addButtonText: { fontSize: 13 },
 });

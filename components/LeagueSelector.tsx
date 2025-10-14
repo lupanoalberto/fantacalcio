@@ -55,7 +55,7 @@ export default function LeagueSelector({
 
 const styles = StyleSheet.create({
   container: { marginBottom: 16 },
-  content: { paddingHorizontal: 4, gap: 10 },
+  content: { paddingHorizontal: 4, gap: 8 },
   button: {
     paddingVertical: 8,
     paddingHorizontal: 16,

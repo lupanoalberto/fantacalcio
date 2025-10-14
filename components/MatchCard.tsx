@@ -73,10 +73,10 @@ export default function MatchCard({
 const styles = StyleSheet.create({
   card: {
     width: "100%",
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    marginBottom: 12,
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    marginBottom: 16,
   },
   row: {
     flexDirection: "row",
@@ -91,20 +91,20 @@ const styles = StyleSheet.create({
   },
   // ✅ logo sinistra → distanza verso destra
   logoLeft: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    marginRight: 10,
+    width: 24,
+    height: 24,
+    borderRadius: 8,
+    marginRight: 8,
   },
   // ✅ logo destra → distanza verso sinistra
   logoRight: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    marginLeft: 10,
+    width: 24,
+    height: 24,
+    borderRadius: 8,
+    marginLeft: 8,
   },
   team: {
-    fontSize: 14,
+    fontSize: 13,
     flexShrink: 1,
   },
   scoreContainer: {
@@ -112,11 +112,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   score: {
-    fontSize: 16,
+    fontSize: 18,
   },
   time: {
     marginTop: 4,
-    fontSize: 12,
+    fontSize: 13,
     textAlign: "center",
   },
 });

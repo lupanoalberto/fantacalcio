@@ -45,16 +45,16 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 8,
     padding: 16,
-    marginBottom: 14,
+    marginBottom: 16,
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 6,
+    marginBottom: 8,
   },
   name: {
-    fontSize: 16,
+    fontSize: 18,
   },
   detail: {
     fontSize: 13,

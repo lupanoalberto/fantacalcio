@@ -1,19 +1,30 @@
-// app/(tabs)/_layout.tsx
-import React from "react";
 import { Tabs } from "expo-router";
+import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../theme";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabsLayout() {
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets(); // 👈 per ottenere il margine inferiore
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.primary,
+        tabBarStyle: {
+          backgroundColor: colors.primary,
+          borderTopColor: colors.secondary,
+          borderTopWidth: 0.5,
+          height: 60 + insets.bottom, // 👈 aggiungiamo spazio extra
+          paddingBottom: insets.bottom + 4, // 👈 così non viene coperta
+        },
+        tabBarActiveTintColor: colors.success,
         tabBarInactiveTintColor: colors.textSecondary,
-        tabBarStyle: { backgroundColor: colors.background },
+        tabBarLabelStyle: {
+          fontFamily: "Poppins_400Regular",
+          fontSize: 13,
+        },
       }}
     >
       <Tabs.Screen
@@ -26,38 +37,29 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="squadra"
+        name="help"
         options={{
-          title: "Squadra",
+          title: "Help",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="people-outline" color={color} size={size} />
+            <Ionicons name="help-circle-outline" color={color} size={size} />
           ),
         }}
       />
       <Tabs.Screen
-        name="asta"
+        name="account"
         options={{
-          title: "Asta",
+          title: "Account",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="cash-outline" color={color} size={size} />
+            <Ionicons name="person-outline" color={color} size={size} />
           ),
         }}
       />
       <Tabs.Screen
-        name="classifica"
+        name="premium"
         options={{
-          title: "Classifica",
+          title: "Premium",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="trophy-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="impostazioni"
-        options={{
-          title: "Impostazioni",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings-outline" color={color} size={size} />
+            <Ionicons name="diamond-outline" color={color} size={size} />
           ),
         }}
       />

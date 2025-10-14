@@ -4,6 +4,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../app/theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { router } from "expo-router";
 
 type HeaderProps = {
   title?: string;
@@ -30,7 +31,7 @@ export default function Header({
         {
           backgroundColor: colors.background,
           borderBottomColor: colors.secondary,
-          paddingTop: insets.top + 8, // 👈 aggiunge spazio sotto la status bar
+          paddingTop: insets.top + 8,
         },
       ]}
     >
@@ -38,7 +39,11 @@ export default function Header({
         {showBackArrow && (
           <TouchableOpacity
             style={styles.iconButton}
-            onPress={onPressBack}
+            onPress={() => {
+              if (router.canGoBack()) router.back();
+              else router.push("/"); // fallback alla home
+            }}
+
             activeOpacity={0.7}
           >
             <Ionicons name="arrow-back-outline" size={22} color={colors.text} />
@@ -52,7 +57,7 @@ export default function Header({
       <View style={styles.icons}>
         <TouchableOpacity
           style={styles.iconButton}
-          onPress={onPressNotifications}
+          onPress={() => router.push("/notifications")}
           activeOpacity={0.7}
         >
           <Ionicons name="notifications-outline" size={22} color={colors.text} />
@@ -75,8 +80,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
-    paddingBottom: 10,
+    paddingHorizontal: 16,
+    paddingBottom: 8,
     borderBottomWidth: 1,
   },
   leftSection: {
@@ -85,13 +90,13 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
   },
   icons: {
     flexDirection: "row",
     gap: 16,
   },
   iconButton: {
-    padding: 6,
+    padding: 8,
   },
 });
