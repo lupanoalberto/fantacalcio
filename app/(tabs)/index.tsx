@@ -1,24 +1,104 @@
 // app/(tabs)/index.tsx
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../theme";
+import Header from "../../components/Header";
+import LeagueCard from "../../components/LeagueCard";
+import LiveMatchesSection from "../../components/LiveMatchesSection";
 
 export default function HomeTab() {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
+
+  // Mock leghe
+  const leagues = [
+    { id: 1, name: "Lega Amici del Calcetto", teamsCount: 10, nextMatch: "20 Ottobre" },
+    { id: 2, name: "Serie Fantacampioni", teamsCount: 8, nextMatch: "21 Ottobre" },
+  ];
+
+  const handleAddLeague = () => {
+    Alert.alert("Nuova lega", "Funzionalità in arrivo!");
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={{ color: colors.text, fontFamily: "Poppins-Medium", fontSize: 18 }}>
-        Benvenuto in Fantacalcio ⚽
-      </Text>
+      {/* HEADER */}
+      <Header
+        title="Fantacalcio"
+        showBackArrow={false}
+        onPressNotifications={() => Alert.alert("Notifiche", "Funzionalità in arrivo!")}
+        onPressShare={() => Alert.alert("Condividi", "Presto potrai condividere la tua lega!")}
+      />
+
+
+      {/* CONTENUTO */}
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <Text style={[styles.title, { color: colors.text, fontFamily: fonts.bold }]}>
+          Fantacalcio Europeo
+        </Text>
+
+        <Text
+          style={[
+            styles.subtitle,
+            { color: colors.textSecondary, fontFamily: fonts.regular },
+          ]}
+        >
+          Gestisci la tua squadra, segui le partite e domina la classifica ⚽
+        </Text>
+
+        {/* SEZIONE LEGHE */}
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.medium }]}>
+            Le tue leghe
+          </Text>
+
+          {leagues.map((league) => (
+            <LeagueCard
+              key={league.id}
+              name={league.name}
+              teamsCount={league.teamsCount}
+              nextMatch={league.nextMatch}
+              onPress={() => Alert.alert("Lega", `Hai aperto ${league.name}`)}
+            />
+          ))}
+
+          {/* Bottone per aggiungere una nuova lega */}
+          <TouchableOpacity
+            style={[styles.addButton, { borderColor: colors.textSecondary }]}
+            activeOpacity={0.8}
+            onPress={handleAddLeague}
+          >
+            <Ionicons name="add" size={20} color={colors.text} />
+            <Text style={[styles.addButtonText, { color: colors.text, fontFamily: fonts.medium }]}>
+              Aggiungi nuova lega
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{ marginTop: 20 }}>
+          <LiveMatchesSection />
+        </View>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
+  container: { flex: 1 },
+  scrollContent: { paddingTop: 40, paddingHorizontal: 20, paddingBottom: 60 },
+  title: { fontSize: 26, marginBottom: 4, textAlign: "center" },
+  subtitle: { fontSize: 14, textAlign: "center", marginBottom: 40 },
+  section: { width: "100%" },
+  sectionTitle: { fontSize: 18, marginBottom: 16 },
+  addButton: {
+    marginTop: 10,
+    paddingVertical: 12,
+    borderWidth: 1,
+    borderRadius: 8,
     alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    gap: 8,
   },
+  addButtonText: { fontSize: 14 },
 });

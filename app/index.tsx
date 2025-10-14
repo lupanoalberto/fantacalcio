@@ -1,19 +1,7 @@
 // app/index.tsx
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { Redirect } from "expo-router";
 
-export default function HomeScreen() {
-  return (
-    <View style={styles.container}>
-      <Text>Benvenuto in Fantacalcio!</Text>
-    </View>
-  );
+export default function Index() {
+  // Reindirizza automaticamente alla navigazione a tab
+  return <Redirect href="/(tabs)" />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
