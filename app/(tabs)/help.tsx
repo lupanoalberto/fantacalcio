@@ -57,7 +57,7 @@ export default function HelpPage() {
     <ScrollView
       style={[styles.container, { backgroundColor: colors.background }]}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 100 }}
+      contentContainerStyle={{ paddingBottom: 24 }}
     >
       {/* HEADER */}
       <Header
@@ -75,7 +75,7 @@ export default function HelpPage() {
         Domande frequenti
       </Text>
 
-      <View style={{ paddingHorizontal: 16 }}>
+      <View style={[{ paddingHorizontal: 16, gap: 16, }]}>
         {faqs.map((item) => (
           <View
             key={item.id}
@@ -119,13 +119,13 @@ export default function HelpPage() {
       <Text
         style={[
           styles.sectionTitle,
-          { color: colors.text, fontFamily: fonts.medium, marginTop: 32 },
+          { color: colors.text, fontFamily: fonts.medium, },
         ]}
       >
         Contatti
       </Text>
 
-      <View style={{ paddingHorizontal: 16 }}>
+      <View style={[{ paddingHorizontal: 16, gap: 16, }]}>
         <TouchableOpacity
           onPress={() => Linking.openURL("mailto:support@fantacalcioapp.com")}
           activeOpacity={0.8}
@@ -163,13 +163,13 @@ export default function HelpPage() {
       <Text
         style={[
           styles.sectionTitle,
-          { color: colors.text, fontFamily: fonts.medium, marginTop: 32 },
+          { color: colors.text, fontFamily: fonts.medium },
         ]}
       >
         Video tutorial
       </Text>
 
-      <View style={{ paddingHorizontal: 16, marginBottom: 16 }}>
+      <View style={[{ paddingHorizontal: 16, gap: 16, }]}>
         {videos.map((vid) => (
           <TouchableOpacity
             key={vid.id}
@@ -200,13 +200,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     marginTop: 24,
-    marginBottom: 16,
+    marginBottom: 8,
     paddingHorizontal: 16,
   },
   faqCard: {
     borderRadius: 8,
     padding: 16,
-    marginBottom: 8,
   },
   faqHeader: {
     flexDirection: "row",
@@ -228,7 +227,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 8,
     padding: 14,
-    marginBottom: 8,
     gap: 8,
   },
   contactText: {
@@ -239,7 +237,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 8,
     padding: 14,
-    marginBottom: 8,
     gap: 8,
   },
   videoTitle: {

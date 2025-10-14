@@ -53,7 +53,7 @@ export default function NewsPage() {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, { gap: 16, }]}
       >
         {newsList.map((item) => (
           <TouchableOpacity
@@ -116,13 +116,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    padding: 16,
-    paddingBottom: 80,
+    marginTop: 24,
+    paddingHorizontal: 16,
+    marginBottom: 24,
   },
   card: {
     borderRadius: 8,
     overflow: "hidden",
-    marginBottom: 16,
   },
   image: {
     width: "100%",

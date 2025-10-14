@@ -34,7 +34,7 @@ export default function Notifications() {
       {/* HEADER */}
       <Header title="Notifiche" showBackArrow />
 
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={[styles.content, { gap: 16, }]}>
         {notifications.map((notif) => (
           <View
             key={notif.id}
@@ -91,13 +91,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    padding: 16,
-    paddingBottom: 80,
+    marginTop: 24,
+    paddingHorizontal: 16,
+    paddingBottom: 24,
   },
   card: {
     padding: 16,
     borderRadius: 8,
-    marginBottom: 16,
   },
   cardHeader: {
     flexDirection: "row",

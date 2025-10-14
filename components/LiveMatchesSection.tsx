@@ -99,7 +99,7 @@ export default function LiveMatchesSection() {
         onSelect={(league) => setSelectedLeague(league as LeagueName)}
       />
 
-      <View style={styles.matches}>
+      <View style={[styles.matches, { gap: 16, }]}>
         {list.map((match, idx) => (
           <MatchCard
             key={`${selectedLeague}-${idx}`}
@@ -117,7 +117,7 @@ export default function LiveMatchesSection() {
 }
 
 const styles = StyleSheet.create({
-  container: { width: "100%", marginTop: 40 },
-  sectionTitle: { fontSize: 18, marginBottom: 16 },
+  container: { width: "100%", marginTop: 24 },
+  sectionTitle: { fontSize: 18, marginBottom: 8 },
   matches: { marginTop: 4 },
 });

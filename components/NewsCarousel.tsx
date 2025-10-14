@@ -115,16 +115,16 @@ const CARD_WIDTH = width * 0.7;
 const IMAGE_HEIGHT = width * 0.7 * 9 / 16;
 
 const styles = StyleSheet.create({
-  container: { marginTop: 32 },
+  container: { marginTop: 24 },
   headerRow: {
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 16,
   },
   sectionTitle: {
     fontSize: 18,
+    marginBottom: 8,
   },
   card: {
     borderRadius: 8,

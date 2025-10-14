@@ -60,7 +60,7 @@ export default function Header({
           onPress={() => router.push("/notifications")}
           activeOpacity={0.7}
         >
-          <Ionicons name="notifications-outline" size={22} color={colors.text} />
+          <Ionicons name="notifications-outline" size={24} color={colors.text} />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -68,7 +68,7 @@ export default function Header({
           onPress={onPressShare}
           activeOpacity={0.7}
         >
-          <Ionicons name="share-outline" size={22} color={colors.text} />
+          <Ionicons name="share-outline" size={24} color={colors.text} />
         </TouchableOpacity>
       </View>
     </View>

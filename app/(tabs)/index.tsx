@@ -74,11 +74,11 @@ export default function HomeTab() {
           </TouchableOpacity>
         </View>
 
-        <View style={{ marginTop: 20 }}>
+        <View>
           <LiveMatchesSection />
         </View>
 
-        <View style={{ marginTop: 20 }}>
+        <View>
           <NewsCarousel />
         </View>
           
@@ -89,13 +89,12 @@ export default function HomeTab() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  scrollContent: { paddingTop: 40, paddingHorizontal: 16, paddingBottom: 60 },
+  scrollContent: { paddingTop: 24, paddingHorizontal: 16, paddingBottom: 24 },
   title: { fontSize: 26, marginBottom: 4, textAlign: "center" },
-  subtitle: { fontSize: 13, textAlign: "center", marginBottom: 40 },
+  subtitle: { fontSize: 13, textAlign: "center", marginBottom: 24 },
   section: { width: "100%" },
-  sectionTitle: { fontSize: 18, marginBottom: 16 },
+  sectionTitle: { fontSize: 18, marginBottom: 8, },
   addButton: {
-    marginTop: 8,
     paddingVertical: 8,
     borderWidth: 1,
     borderRadius: 8,

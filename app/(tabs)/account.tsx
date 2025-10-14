@@ -21,7 +21,7 @@ export default function AccountPage() {
     <ScrollView
       style={[styles.container, { backgroundColor: colors.background }]}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 80 }}
+      contentContainerStyle={{ paddingBottom: 24 }}
     >
       {/* HEADER */}
       <Header
@@ -38,20 +38,20 @@ export default function AccountPage() {
         Informazioni personali
       </Text>
 
-      <View style={[styles.card, { backgroundColor: colors.primary }]}>
+      <View style={[styles.card, { backgroundColor: colors.primary, gap: 8, }]}>
         <View style={styles.row}>
           <Text style={[styles.label, { color: colors.textSecondary }]}>Nome</Text>
-          <Text style={[styles.value, { color: colors.text }]}>Alberto L.</Text>
+          <Text style={[styles.value, { color: colors.text }]}>Alberto Lupano</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={[styles.label, { color: colors.textSecondary }]}>Email</Text>
-          <Text style={[styles.value, { color: colors.text }]}>alberto@email.com</Text>
+          <Text style={[styles.value, { color: colors.text }]}>alberto@gmail.com</Text>
         </View>
 
         <View style={styles.row}>
-          <Text style={[styles.label, { color: colors.textSecondary }]}>Squadra</Text>
-          <Text style={[styles.value, { color: colors.text }]}>FC Paddock</Text>
+          <Text style={[styles.label, { color: colors.textSecondary }]}>Password</Text>
+          <Text style={[styles.value, { color: colors.text }]}>********</Text>
         </View>
 
         <TouchableOpacity activeOpacity={0.8} style={styles.editButton}>
@@ -79,7 +79,7 @@ export default function AccountPage() {
         Privacy e permessi
       </Text>
 
-      <View style={[styles.card, { backgroundColor: colors.primary, gap: 16, }]}>
+      <View style={[styles.card, { backgroundColor: colors.primary, gap: 8, }]}>
         <View style={styles.switchRow}>
           <Text style={[styles.switchLabel, { color: colors.text }]}>
             Notifiche push
@@ -153,7 +153,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     marginHorizontal: 16,
-    marginBottom: 16,
   },
   row: {
     flexDirection: "row",
