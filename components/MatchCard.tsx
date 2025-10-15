@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    maxWidth: "40%",
+    maxWidth: "30%",
   },
   // ✅ logo sinistra → distanza verso destra
   logoLeft: {
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   scoreContainer: {
-    width: 60,
+    width: "40%",
     alignItems: "center",
   },
   score: {

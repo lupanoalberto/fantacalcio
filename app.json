@@ -11,6 +11,9 @@
     "ios": {
       "supportsTablet": true
     },
+    "extra": {
+      "FOOTBALL_API_KEY": "b00a7694be194b56b5ef1a09bf9cd15a"
+    },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",

@@ -1,91 +1,51 @@
 // components/LiveMatchesSection.tsx
-import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { useTheme } from "../app/theme";
 import LeagueSelector from "./LeagueSelector";
 import MatchCard from "./MatchCard";
+import { getLiveOrUpcomingMatches } from "../services/footballApi";
 
 type LeagueName = "Serie A" | "Premier League" | "LaLiga" | "Bundesliga" | "Ligue 1";
-
-// Aggiungiamo i loghi come campi opzionali
-type Match = {
-  homeTeam: string;
-  awayTeam: string;
-  score: string;
-  time?: string;
-  homeLogo?: string; // NEW
-  awayLogo?: string; // NEW
-};
 
 export default function LiveMatchesSection() {
   const { colors, fonts } = useTheme();
   const [selectedLeague, setSelectedLeague] = useState<LeagueName>("Serie A");
+  const [matches, setMatches] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const lastValidMatches = useRef<any[]>([]);
 
   const leagues: LeagueName[] = ["Serie A", "Premier League", "LaLiga", "Bundesliga", "Ligue 1"];
 
-  // Usa PNG/JPG (no SVG da web per <Image />)
-  const matches: Record<LeagueName, Match[]> = {
-    "Serie A": [
-      {
-        homeTeam: "Juventus",
-        awayTeam: "Milan",
-        score: "2 - 1",
-        time: "78’",
-        homeLogo: "https://i.imgur.com/2K7Q3Qk.png", // Esempio PNG
-        awayLogo: "https://i.imgur.com/5S1Yq9Z.png", // Esempio PNG
-      },
-      {
-        homeTeam: "Inter",
-        awayTeam: "Roma",
-        score: "0 - 0",
-        time: "65’",
-        homeLogo: "https://i.imgur.com/1n8t5Qj.png",
-        awayLogo: "https://i.imgur.com/Ym9k3Qn.png",
-      },
-    ],
-    "Premier League": [
-      {
-        homeTeam: "Chelsea",
-        awayTeam: "Arsenal",
-        score: "1 - 2",
-        time: "90+2’",
-        homeLogo: "https://i.imgur.com/gk7n6sE.png",
-        awayLogo: "https://i.imgur.com/7Jp0o2s.png",
-      },
-    ],
-    LaLiga: [
-      {
-        homeTeam: "Barcellona",
-        awayTeam: "Real Madrid",
-        score: "1 - 3",
-        time: "FT",
-        homeLogo: "https://i.imgur.com/4qQx3cB.png",
-        awayLogo: "https://i.imgur.com/3xw2b9C.png",
-      },
-    ],
-    Bundesliga: [
-      {
-        homeTeam: "Bayern",
-        awayTeam: "Dortmund",
-        score: "3 - 2",
-        time: "70’",
-        homeLogo: "https://i.imgur.com/Q0P8o9Q.png",
-        awayLogo: "https://i.imgur.com/9J1w7X2.png",
-      },
-    ],
-    "Ligue 1": [
-      {
-        homeTeam: "PSG",
-        awayTeam: "Marseille",
-        score: "2 - 0",
-        time: "HT",
-        homeLogo: "https://i.imgur.com/2vJ0m9O.png",
-        awayLogo: "https://i.imgur.com/2iYJpQy.png",
-      },
-    ],
-  };
+  // ✅ useCallback mantiene stabile la funzione tra i render
+  const fetchMatches = useCallback(async () => {
+    try {
+      const data = await getLiveOrUpcomingMatches(selectedLeague);
+      if (data && data.length > 0) {
+        setMatches(data);
+        lastValidMatches.current = data;
+      } else {
+        setMatches(lastValidMatches.current);
+      }
+    } catch (err) {
+      console.error("Errore aggiornamento partite:", err);
+      setMatches(lastValidMatches.current);
+    } finally {
+      setLoading(false);
+    }
+  }, [selectedLeague]); // la funzione dipende solo dalla lega
 
-  const list = matches[selectedLeague] ?? [];
+  // Fetch iniziale o cambio lega
+  useEffect(() => {
+    setLoading(true);
+    fetchMatches();
+  }, [fetchMatches]);
+
+  // Fetch ciclico ogni 30 secondi
+  useEffect(() => {
+    const interval = setInterval(fetchMatches, 30000);
+    return () => clearInterval(interval);
+  }, [fetchMatches]);
 
   return (
     <View style={styles.container}>
@@ -99,19 +59,73 @@ export default function LiveMatchesSection() {
         onSelect={(league) => setSelectedLeague(league as LeagueName)}
       />
 
-      <View style={[styles.matches, { gap: 16, }]}>
-        {list.map((match, idx) => (
-          <MatchCard
-            key={`${selectedLeague}-${idx}`}
-            homeTeam={match.homeTeam}
-            awayTeam={match.awayTeam}
-            score={match.score}
-            time={match.time}
-            homeLogo={match.homeLogo}
-            awayLogo={match.awayLogo}
-          />
-        ))}
-      </View>
+      {loading ? (
+        <ActivityIndicator size="small" color={colors.success} style={{ marginTop: 16 }} />
+      ) : (
+        <View style={[styles.matches, { gap: 16 }]}>
+          {matches.length > 0 ? (
+            matches.map((match, idx) => {
+              const status = match?.status;
+              const date = new Date(match?.utcDate);
+
+              let timeLabel = "";
+
+              if (status === "IN_PLAY") timeLabel = "LIVE";
+              else if (status === "PAUSED") timeLabel = "PAUSA";
+              else if (status === "FINISHED") timeLabel = "FT";
+              else if (status === "TIMED" || status === "SCHEDULED") {
+                timeLabel = date.toLocaleString("it-IT", {
+                  weekday: "short",
+                  day: "2-digit",
+                  month: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                });
+              } else {
+                // fallback per qualsiasi altro stato (POSTPONED, CANCELLED, ecc.)
+                timeLabel = "—";
+              }
+              const isScheduled = match?.status === "SCHEDULED";
+              const scoreHome = match?.score?.fullTime?.home ?? (isScheduled ? "" : "");
+              const scoreAway = match?.score?.fullTime?.away ?? (isScheduled ? "" : "");
+
+              const homeLogo =
+                match?.homeTeam?.crest ||
+                match?.homeTeam?.crestUrl ||
+                "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
+
+              const awayLogo =
+                match?.awayTeam?.crest ||
+                match?.awayTeam?.crestUrl ||
+                "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
+
+              return (
+                <MatchCard
+                  key={`${selectedLeague}-${match?.id ?? idx}`}
+                  homeTeam={match?.homeTeam?.name ?? "—"}
+                  awayTeam={match?.awayTeam?.name ?? "—"}
+                  score={`${scoreHome} - ${scoreAway}`}
+                  time={timeLabel}
+                  homeLogo={homeLogo}
+                  awayLogo={awayLogo}
+                />
+              );
+            })
+          ) : (
+            <Text
+              style={{
+                color: colors.textSecondary,
+                fontFamily: fonts.regular,
+                textAlign: "center",
+                marginTop: 8,
+                fontSize: 13,
+              }}
+            >
+              Nessuna partita disponibile
+            </Text>
+          )}
+        </View>
+      )}
     </View>
   );
 }
