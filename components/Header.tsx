@@ -83,6 +83,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 8,
     borderBottomWidth: 1,
+    position: "sticky", 
+    top: 0, 
+    left: 0, 
+    right: 0, 
+    zIndex: 10,
   },
   leftSection: {
     flexDirection: "row",

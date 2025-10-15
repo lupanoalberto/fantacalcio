@@ -2,9 +2,12 @@ import React from "react";
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native";
 import { useTheme } from "./theme";
 import Header from "../components/Header";
+import { useRouter } from "expo-router";
+import type { Href } from "expo-router";
 
 export default function NewsPage() {
   const { colors, fonts } = useTheme();
+  const router = useRouter();
 
   // Mock notizie (stesse del carosello + più contenuti)
   const newsList = [
@@ -49,7 +52,7 @@ export default function NewsPage() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* HEADER con back arrow */}
-      <Header title="Notizie" showBackArrow />
+      <Header title="Notizie" showBackArrow={true} />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -59,7 +62,9 @@ export default function NewsPage() {
           <TouchableOpacity
             key={item.id}
             activeOpacity={0.9}
-            style={[styles.card, { backgroundColor: colors.secondary }]}
+            style={[styles.card, { backgroundColor: colors.primary }]}
+            onPress={() => router.push((`/news/${String(item.id)}`) as Href)}
+
           >
             <Image source={{ uri: item.image }} style={styles.image} />
             <View style={styles.textContainer}>

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useTheme } from "../theme";
 import { Ionicons } from "@expo/vector-icons";
-import Header from "@/components/Header";
+import Header from "../../components/Header";
 
 export default function HelpPage() {
   const { colors, fonts } = useTheme();
@@ -54,16 +54,17 @@ export default function HelpPage() {
   };
 
   return (
-    <ScrollView
-      style={[styles.container, { backgroundColor: colors.background }]}
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 24 }}
-    >
-      {/* HEADER */}
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    {/* HEADER */}
       <Header
         title="Fantacalcio"
         showBackArrow={false}
       />
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: 24 }}
+    >
 
       {/* ===================== SEZIONE FAQ ===================== */}
       <Text
@@ -79,7 +80,7 @@ export default function HelpPage() {
         {faqs.map((item) => (
           <View
             key={item.id}
-            style={[styles.faqCard, { backgroundColor: colors.secondary }]}
+            style={[styles.faqCard, { backgroundColor: colors.primary }]}
           >
             <TouchableOpacity
               onPress={() => setOpenFAQ(openFAQ === item.id ? null : item.id)}
@@ -129,7 +130,7 @@ export default function HelpPage() {
         <TouchableOpacity
           onPress={() => Linking.openURL("mailto:support@fantacalcioapp.com")}
           activeOpacity={0.8}
-          style={[styles.contactCard, { backgroundColor: colors.secondary }]}
+          style={[styles.contactCard, { backgroundColor: colors.primary }]}
         >
           <Ionicons name="mail-outline" size={24} color={colors.success} />
           <Text
@@ -145,7 +146,7 @@ export default function HelpPage() {
         <TouchableOpacity
           onPress={() => openLink("https://instagram.com")}
           activeOpacity={0.8}
-          style={[styles.contactCard, { backgroundColor: colors.secondary }]}
+          style={[styles.contactCard, { backgroundColor: colors.primary }]}
         >
           <Ionicons name="logo-instagram" size={20} color={colors.success} />
           <Text
@@ -175,7 +176,7 @@ export default function HelpPage() {
             key={vid.id}
             onPress={() => openLink(vid.url)}
             activeOpacity={0.85}
-            style={[styles.videoCard, { backgroundColor: colors.secondary }]}
+            style={[styles.videoCard, { backgroundColor: colors.primary }]}
           >
             <Ionicons name="play-circle-outline" size={24} color={colors.success} />
             <Text
@@ -190,6 +191,7 @@ export default function HelpPage() {
         ))}
       </View>
     </ScrollView>
+    </View>
   );
 }
 

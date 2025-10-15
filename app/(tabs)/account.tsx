@@ -18,16 +18,17 @@ export default function AccountPage() {
   const [shareData, setShareData] = useState(false);
 
   return (
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+        {/* HEADER */}
+          <Header
+            title="Fantacalcio"
+            showBackArrow={false}
+          />
     <ScrollView
-      style={[styles.container, { backgroundColor: colors.background }]}
+      style={styles.container}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingBottom: 24 }}
     >
-      {/* HEADER */}
-      <Header
-        title="Fantacalcio"
-        showBackArrow={false}
-      />
       {/* ================== SEZIONE INFORMAZIONI PERSONALI ================== */}
       <Text
         style={[
@@ -136,6 +137,7 @@ export default function AccountPage() {
         </TouchableOpacity>
       </View>
     </ScrollView>
+    </View>
   );
 }
 

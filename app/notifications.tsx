@@ -1,11 +1,14 @@
 // app/notifications.tsx
 import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { useTheme } from "./theme";
 import Header from "../components/Header";
+import { useRouter } from "expo-router";
+import { Href } from "expo-router";
 
 export default function Notifications() {
   const { colors, fonts } = useTheme();
+  const router = useRouter();
 
   // Mock notifiche per ora
   const notifications = [
@@ -32,13 +35,14 @@ export default function Notifications() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* HEADER */}
-      <Header title="Notifiche" showBackArrow />
+      <Header title="Notifiche" showBackArrow={true} />
 
       <ScrollView contentContainerStyle={[styles.content, { gap: 16, }]}>
         {notifications.map((notif) => (
-          <View
+          <TouchableOpacity
             key={notif.id}
-            style={[styles.card, { backgroundColor: colors.secondary }]}
+            style={[styles.card, { backgroundColor: colors.primary }]}
+            onPress={() => router.push((`/notifications/${String(notif.id)}`) as Href)}
           >
             <View style={styles.cardHeader}>
               <Text
@@ -66,7 +70,7 @@ export default function Notifications() {
             >
               {notif.message}
             </Text>
-          </View>
+          </TouchableOpacity>
         ))}
 
         {notifications.length === 0 && (

@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useTheme } from "../app/theme";
 import { useRouter } from "expo-router";
-
+import type { Href } from "expo-router";
 const { width } = Dimensions.get("window");
 
 const mockNews = [
@@ -51,7 +51,7 @@ export default function NewsCarousel() {
             { color: colors.text, fontFamily: fonts.medium },
           ]}
         >
-          Notizie dal calcio
+          Notizie dal campo
         </Text>
 
         <TouchableOpacity
@@ -80,7 +80,8 @@ export default function NewsCarousel() {
           <TouchableOpacity
             key={news.id}
             activeOpacity={0.85}
-            style={[styles.card, { backgroundColor: colors.secondary }]}
+            style={[styles.card, { backgroundColor: colors.primary }]}
+            onPress={() => router.push((`/news/${news.id}`) as Href)}
           >
             <Image source={{ uri: news.image }} style={styles.image} />
             <View style={styles.textContainer}>
