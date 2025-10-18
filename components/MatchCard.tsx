@@ -21,6 +21,20 @@ export default function MatchCard({
 }: MatchCardProps) {
   const { colors, fonts } = useTheme();
 
+  // 🔹 Determina il colore in base allo stato
+  let scoreColor = colors.text;
+  let timeColor = colors.textSecondary;
+
+  const normalizedTime = time?.toUpperCase?.() ?? "";
+
+  if (normalizedTime.includes("LIVE") || normalizedTime.includes("HT")) {
+    scoreColor = colors.success; // verde per LIVE
+    timeColor = colors.success;
+  } else if (["POSTPONED", "SUSPENDED", "CANCELLED"].some((w) => normalizedTime.includes(w))) {
+    scoreColor = colors.error; // rosso per problemi
+    timeColor = colors.warning; // giallo per sospensione
+  }
+
   return (
     <View style={[styles.card, { backgroundColor: colors.primary }]}>
       {/* Riga centrale con squadre e risultato */}
@@ -39,7 +53,7 @@ export default function MatchCard({
 
         {/* Risultato */}
         <View style={styles.scoreContainer}>
-          <Text style={[styles.score, { color: colors.success, fontFamily: fonts.bold }]}>
+          <Text style={[styles.score, { color: scoreColor, fontFamily: fonts.bold }]}>
             {score}
           </Text>
         </View>
@@ -60,9 +74,10 @@ export default function MatchCard({
         </View>
       </View>
 
+      
       {/* Orario o stato match */}
       {time && (
-        <Text style={[styles.time, { color: colors.textSecondary, fontFamily: fonts.regular }]}>
+        <Text style={[styles.time, { color: timeColor, fontFamily: fonts.regular }]}>
           {time}
         </Text>
       )}

@@ -6,7 +6,7 @@ import LeagueSelector from "./LeagueSelector";
 import MatchCard from "./MatchCard";
 import { getLiveOrUpcomingMatches } from "../services/footballApi";
 
-type LeagueName = "Serie A" | "Premier League" | "LaLiga" | "Bundesliga" | "Ligue 1";
+type LeagueName = "Serie A" | "Premier League" | "LaLiga";
 
 export default function LiveMatchesSection() {
   const { colors, fonts } = useTheme();
@@ -15,7 +15,7 @@ export default function LiveMatchesSection() {
   const [loading, setLoading] = useState(true);
   const lastValidMatches = useRef<any[]>([]);
 
-  const leagues: LeagueName[] = ["Serie A", "Premier League", "LaLiga", "Bundesliga", "Ligue 1"];
+  const leagues: LeagueName[] = ["Serie A", "Premier League", "LaLiga"];
 
   // ✅ useCallback mantiene stabile la funzione tra i render
   const fetchMatches = useCallback(async () => {
@@ -24,12 +24,9 @@ export default function LiveMatchesSection() {
       if (data && data.length > 0) {
         setMatches(data);
         lastValidMatches.current = data;
-      } else {
-        setMatches(lastValidMatches.current);
       }
     } catch (err) {
       console.error("Errore aggiornamento partite:", err);
-      setMatches(lastValidMatches.current);
     } finally {
       setLoading(false);
     }
@@ -43,7 +40,7 @@ export default function LiveMatchesSection() {
 
   // Fetch ciclico ogni 30 secondi
   useEffect(() => {
-    const interval = setInterval(fetchMatches, 30000);
+    const interval = setInterval(fetchMatches, 120000);
     return () => clearInterval(interval);
   }, [fetchMatches]);
 
@@ -70,8 +67,12 @@ export default function LiveMatchesSection() {
 
               let timeLabel = "";
 
-              if (status === "IN_PLAY") timeLabel = "LIVE";
-              else if (status === "PAUSED") timeLabel = "PAUSA";
+              if (status === "IN_PLAY") {
+                timeLabel = "LIVE";
+              } 
+              else if (status === "PAUSED") {
+                timeLabel = "HT";
+              }
               else if (status === "FINISHED") timeLabel = "FT";
               else if (status === "TIMED" || status === "SCHEDULED") {
                 timeLabel = date.toLocaleString("it-IT", {
@@ -85,9 +86,14 @@ export default function LiveMatchesSection() {
                 // fallback per qualsiasi altro stato (POSTPONED, CANCELLED, ecc.)
                 timeLabel = "—";
               }
-              const isScheduled = match?.status === "SCHEDULED";
-              const scoreHome = match?.score?.fullTime?.home ?? (isScheduled ? "" : "");
-              const scoreAway = match?.score?.fullTime?.away ?? (isScheduled ? "" : "");
+              
+              let scoreHome = match?.score?.fullTime?.home;
+              let scoreAway = match?.score?.fullTime?.away;
+
+              if (scoreHome === null && scoreAway === null) {
+                scoreHome = "";
+                scoreAway = "";
+              }
 
               const homeLogo =
                 match?.homeTeam?.crest ||
