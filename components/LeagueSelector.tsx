@@ -33,8 +33,7 @@ export default function LeagueSelector({
             style={[
               styles.button,
               {
-                backgroundColor: isActive ? colors.success : "transparent",
-                borderColor: colors.textSecondary,
+                backgroundColor: isActive ? colors.success : colors.secondary,
               },
             ]}
           >
@@ -58,9 +57,8 @@ const styles = StyleSheet.create({
   content: { gap: 16 },
   button: {
     fontSize: 13,
-    paddingVertical: 4,
+    paddingVertical: 8,
     paddingHorizontal: 16,
-    borderRadius: 40,
-    borderWidth: 1,
+    borderRadius: 24,
   },
 });

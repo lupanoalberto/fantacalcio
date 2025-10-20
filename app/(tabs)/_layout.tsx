@@ -37,9 +37,18 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="calendar"
+        options={{
+          title: "Calendario",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="calendar-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="help"
         options={{
-          title: "Help",
+          title: "Aiuto",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="help-circle-outline" color={color} size={size} />
           ),
@@ -54,15 +63,6 @@ export default function TabsLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="premium"
-        options={{
-          title: "Premium",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="diamond-outline" color={color} size={size} />
-          ),
-        }}
-      />
-    </Tabs>
+  </Tabs>
   );
 }

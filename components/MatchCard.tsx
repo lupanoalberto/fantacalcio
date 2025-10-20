@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { useTheme } from "../app/theme";
+import { Colors } from "@/constants/colors";
 
 type MatchCardProps = {
   homeTeam: string;
@@ -9,6 +10,9 @@ type MatchCardProps = {
   time?: string;
   homeLogo?: string;
   awayLogo?: string;
+  homeWin?: string;
+  draw?: string;
+  awayWin?: string;
 };
 
 export default function MatchCard({
@@ -18,6 +22,9 @@ export default function MatchCard({
   time,
   homeLogo,
   awayLogo,
+  homeWin,
+  draw,
+  awayWin,
 }: MatchCardProps) {
   const { colors, fonts } = useTheme();
 
@@ -74,13 +81,18 @@ export default function MatchCard({
         </View>
       </View>
 
-      
+
       {/* Orario o stato match */}
       {time && (
         <Text style={[styles.time, { color: timeColor, fontFamily: fonts.regular }]}>
           {time}
         </Text>
       )}
+        <View style={styles.oddsRow}>
+          <Text style={[styles.odd, { color: colors.text }]}>{homeWin ?? "-"}</Text>
+          <Text style={[styles.odd, { color: colors.text }]}>{draw ?? "-"}</Text>
+          <Text style={[styles.odd, { color: colors.text }]}>{awayWin ?? "-"}</Text>
+        </View>
     </View>
   );
 }
@@ -89,7 +101,7 @@ const styles = StyleSheet.create({
   card: {
     width: "100%",
     borderRadius: 8,
-    paddingVertical: 8,
+    paddingVertical: 16,
     paddingHorizontal: 16,
   },
   row: {
@@ -133,4 +145,18 @@ const styles = StyleSheet.create({
     fontSize: 13,
     textAlign: "center",
   },
+  oddsRow: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  width: "100%",
+  marginTop: 8,
+},
+odd: {
+  fontSize: 13,
+  textAlign: "center",
+paddingVertical: 4,
+paddingHorizontal: 8,
+borderRadius: 8,
+backgroundColor: Colors.secondary,
+},
 });

@@ -1,5 +1,5 @@
 // components/LiveMatchesSection.tsx
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { useTheme } from "../app/theme";
 import LeagueSelector from "./LeagueSelector";
@@ -13,7 +13,6 @@ export default function LiveMatchesSection() {
   const [selectedLeague, setSelectedLeague] = useState<LeagueName>("Serie A");
   const [matches, setMatches] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const lastValidMatches = useRef<any[]>([]);
 
   const leagues: LeagueName[] = ["Serie A", "Premier League", "LaLiga"];
 
@@ -23,7 +22,6 @@ export default function LiveMatchesSection() {
       const data = await getLiveOrUpcomingMatches(selectedLeague);
       if (data && data.length > 0) {
         setMatches(data);
-        lastValidMatches.current = data;
       }
     } catch (err) {
       console.error("Errore aggiornamento partite:", err);
@@ -38,10 +36,9 @@ export default function LiveMatchesSection() {
     fetchMatches();
   }, [fetchMatches]);
 
-  // Fetch ciclico ogni 30 secondi
   useEffect(() => {
-    const interval = setInterval(fetchMatches, 120000);
-    return () => clearInterval(interval);
+  const interval = setInterval(fetchMatches, 60000);
+  return () => clearInterval(interval);
   }, [fetchMatches]);
 
   return (
@@ -64,16 +61,19 @@ export default function LiveMatchesSection() {
             matches.map((match, idx) => {
               const status = match?.status;
               const date = new Date(match?.utcDate);
+              
 
               let timeLabel = "";
 
               if (status === "IN_PLAY") {
                 timeLabel = "LIVE";
-              } 
+              }
               else if (status === "PAUSED") {
                 timeLabel = "HT";
               }
-              else if (status === "FINISHED") timeLabel = "FT";
+              else if (status === "FINISHED") {
+                timeLabel = "FT";
+              }
               else if (status === "TIMED" || status === "SCHEDULED") {
                 timeLabel = date.toLocaleString("it-IT", {
                   weekday: "short",
@@ -82,11 +82,8 @@ export default function LiveMatchesSection() {
                   hour: "2-digit",
                   minute: "2-digit",
                 });
-              } else {
-                // fallback per qualsiasi altro stato (POSTPONED, CANCELLED, ecc.)
-                timeLabel = "—";
               }
-              
+
               let scoreHome = match?.score?.fullTime?.home;
               let scoreAway = match?.score?.fullTime?.away;
 
@@ -105,6 +102,8 @@ export default function LiveMatchesSection() {
                 match?.awayTeam?.crestUrl ||
                 "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
 
+              
+
               return (
                 <MatchCard
                   key={`${selectedLeague}-${match?.id ?? idx}`}
@@ -114,6 +113,7 @@ export default function LiveMatchesSection() {
                   time={timeLabel}
                   homeLogo={homeLogo}
                   awayLogo={awayLogo}
+                  
                 />
               );
             })
@@ -127,7 +127,7 @@ export default function LiveMatchesSection() {
                 fontSize: 13,
               }}
             >
-              Nessuna partita disponibile
+              Nessuna partita in live
             </Text>
           )}
         </View>
