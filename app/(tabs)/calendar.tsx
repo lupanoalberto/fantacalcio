@@ -85,10 +85,10 @@ export default function CalendarScreen() {
         borderBottomWidth: 1,
         borderBottomColor: colors.secondary,
         padding: 16,
-        flex: 1, flexDirection: "column", gap: 8,
+        flex: 1, flexDirection: "column",
       }}
     >
-      <Text style={{ color: colors.textSecondary, fontSize: 13 }}>
+      <Text style={{ color: colors.textSecondary, fontSize: 13, marginBottom: 8, }}>
         {new Date(m.utcDate).toLocaleDateString("it-IT", {
           weekday: "short",
           day: "2-digit",

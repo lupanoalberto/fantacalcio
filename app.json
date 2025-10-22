@@ -12,7 +12,8 @@
       "supportsTablet": true
     },
     "extra": {
-      "FOOTBALL_API_KEY": "b00a7694be194b56b5ef1a09bf9cd15a"
+      "FOOTBALL_API_KEY": "b00a7694be194b56b5ef1a09bf9cd15a",
+      "NEWS_API_KEY": "05a35bac92ae4418a1677b953cf4bbcb"
     },
     "android": {
       "adaptiveIcon": {

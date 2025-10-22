@@ -1,18 +1,24 @@
 // app/(tabs)/index.tsx
-import React from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../theme";
 import Header from "../../components/Header";
 import LeagueCard from "../../components/LeagueCard";
-import LiveMatchesSection from "../../components/LiveMatchesSection";
-import NewsCarousel from "../../components/NewsCarousel";
+import LiveMatchesSection from "@/components/LiveMatchesSection";
+import NewsCarousel from "@/components/NewsCarousel";
+import LeagueSelector from "@/components/LeagueSelector";
+import { useState } from "react";
+
+type LeagueName = "Serie A" | "Premier League" | "LaLiga";
 
 export default function HomeTab() {
   const { colors, fonts } = useTheme();
+  const [selectedLeague, setSelectedLeague] = useState<LeagueName>("Serie A");
+
+  const leagues: LeagueName[] = ["Serie A", "Premier League", "LaLiga"];
 
   // Mock leghe
-  const leagues = [
+  const leaguesFanta = [
     { id: 1, name: "Lega Amici del Calcetto", teamsCount: 10, nextMatch: "20 Ottobre" },
     { id: 2, name: "Serie Fantacampioni", teamsCount: 8, nextMatch: "21 Ottobre" },
   ];
@@ -51,7 +57,7 @@ export default function HomeTab() {
             Le tue leghe
           </Text>
 
-          {leagues.map((league) => (
+          {leaguesFanta.map((league) => (
             <LeagueCard
               key={league.id}
               name={league.name}
@@ -74,12 +80,20 @@ export default function HomeTab() {
           </TouchableOpacity>
         </View>
 
-        <View>
-          <LiveMatchesSection />
+        <View style={ [{paddingTop: 8,}] }>
+          <LeagueSelector
+                  leagues={leagues}
+                  selectedLeague={selectedLeague}
+                  onSelect={(league) => setSelectedLeague(league as LeagueName)}
+                />
         </View>
 
         <View>
-          <NewsCarousel />
+          <LiveMatchesSection selectedLeague={selectedLeague} />
+        </View>
+
+        <View>
+          <NewsCarousel selectedLeague={selectedLeague} />
         </View>
           
       </ScrollView>
@@ -92,7 +106,7 @@ const styles = StyleSheet.create({
   scrollContent: { paddingTop: 24, paddingHorizontal: 16, paddingBottom: 24 },
   title: { fontSize: 26, marginBottom: 4, textAlign: "center" },
   subtitle: { fontSize: 13, textAlign: "center", marginBottom: 24 },
-  section: { width: "100%" },
+  section: { width: "100%", },
   sectionTitle: { fontSize: 18, marginBottom: 8, },
   addButton: {
     paddingVertical: 8,

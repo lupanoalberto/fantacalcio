@@ -2,19 +2,17 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { useTheme } from "../app/theme";
-import LeagueSelector from "./LeagueSelector";
 import MatchCard from "./MatchCard";
 import { getLiveOrUpcomingMatches } from "../services/footballApi";
 
-type LeagueName = "Serie A" | "Premier League" | "LaLiga";
+type Props = {
+  selectedLeague: string;
+}
 
-export default function LiveMatchesSection() {
+export default function LiveMatchesSection({ selectedLeague }: Props) {
   const { colors, fonts } = useTheme();
-  const [selectedLeague, setSelectedLeague] = useState<LeagueName>("Serie A");
   const [matches, setMatches] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const leagues: LeagueName[] = ["Serie A", "Premier League", "LaLiga"];
 
   // ✅ useCallback mantiene stabile la funzione tra i render
   const fetchMatches = useCallback(async () => {
@@ -43,15 +41,10 @@ export default function LiveMatchesSection() {
 
   return (
     <View style={styles.container}>
+
       <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.medium }]}>
         Partite in live
       </Text>
-
-      <LeagueSelector
-        leagues={leagues}
-        selectedLeague={selectedLeague}
-        onSelect={(league) => setSelectedLeague(league as LeagueName)}
-      />
 
       {loading ? (
         <ActivityIndicator size="small" color={colors.success} style={{ marginTop: 16 }} />
@@ -137,7 +130,7 @@ export default function LiveMatchesSection() {
 }
 
 const styles = StyleSheet.create({
-  container: { width: "100%", marginTop: 24 },
+  container: { width: "100%", marginTop: 8 },
   sectionTitle: { fontSize: 18, marginBottom: 8 },
   matches: { marginTop: 4 },
 });

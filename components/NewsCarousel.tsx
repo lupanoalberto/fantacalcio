@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,35 +11,26 @@ import {
 import { useTheme } from "../app/theme";
 import { useRouter } from "expo-router";
 import type { Href } from "expo-router";
+import { getFootballNews } from "@/services/newsApi";
 const { width } = Dimensions.get("window");
 
-const mockNews = [
-  {
-    id: 1,
-    title: "Champions League: serata di gol e spettacolo",
-    excerpt: "Il Real Madrid travolge il Bayern e vola in finale.",
-    image:
-      "https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg?auto=compress&cs=tinysrgb&w=800",
-  },
-  {
-    id: 2,
-    title: "Serie A: lotta serrata per il quarto posto",
-    excerpt: "La Roma supera l'Atalanta e sogna la Champions.",
-    image:
-      "https://images.pexels.com/photos/46798/the-ball-stadion-football-the-pitch-46798.jpeg?auto=compress&cs=tinysrgb&w=800",
-  },
-  {
-    id: 3,
-    title: "Premier League: City e Arsenal a braccetto in vetta",
-    excerpt: "Guardiola: 'Non possiamo più sbagliare nulla'.",
-    image:
-      "https://images.pexels.com/photos/274422/pexels-photo-274422.jpeg?auto=compress&cs=tinysrgb&w=800",
-  },
-];
+type Props = {
+  selectedLeague: string;
+}
 
-export default function NewsCarousel() {
+export default function NewsCarousel({ selectedLeague }: Props) {
   const { colors, fonts } = useTheme();
   const router = useRouter();
+  const [news, setNews] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      const data = await getFootballNews(selectedLeague);
+      setNews(data.slice(0,3));
+    };
+    fetchNews();
+  }, [selectedLeague]);
+  
 
   return (
     <View style={styles.container}>
@@ -76,14 +67,14 @@ export default function NewsCarousel() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ gap: 16 }}
       >
-        {mockNews.map((news) => (
+        {news.map((news, index) => (
           <TouchableOpacity
-            key={news.id}
+            key={index}
             activeOpacity={0.85}
             style={[styles.card, { backgroundColor: colors.primary }]}
             onPress={() => router.push((`/news/${news.id}`) as Href)}
           >
-            <Image source={{ uri: news.image }} style={styles.image} />
+            <Image source={{ uri: news.urlToImage }} style={styles.image} />
             <View style={styles.textContainer}>
               <Text
                 numberOfLines={2}
@@ -101,7 +92,7 @@ export default function NewsCarousel() {
                   { color: colors.textSecondary, fontFamily: fonts.regular },
                 ]}
               >
-                {news.excerpt}
+                {news.description}
               </Text>
             </View>
           </TouchableOpacity>

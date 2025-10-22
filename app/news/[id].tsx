@@ -1,40 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useTheme } from "../theme";
 import Header from "../../components/Header";
+import { getFootballNews } from "@/services/newsApi";
 
-export default function NewsDetail() {
+type Props = {
+  selectedLeague: string;
+}
+
+export default function NewsDetail({ selectedLeague }: Props) {
   const { id } = useLocalSearchParams(); // recupera l'id dalla rotta
   const { colors, fonts } = useTheme();
+  const [news, setNews] = useState<any[]>([]);
+  
+  useEffect(() => {
+      const fetchNews = async () => {
+        const data = await getFootballNews(selectedLeague);
+        setNews(data);
+      };
+      fetchNews();
+    }, [selectedLeague]);
 
-  // Mock dati: in futuro potrai sostituirli con fetch da API o context
-  const newsList = [
-    {
-      id: "1",
-      title: "Champions League: serata di gol e spettacolo",
-      image:
-        "https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg?auto=compress&cs=tinysrgb&w=800",
-      date: "14 ottobre 2025",
-      content: `Il Real Madrid travolge il Bayern Monaco 4-1 con una prestazione scintillante di Vinicius Jr e Bellingham. 
-      I Blancos dominano la partita e conquistano la finale di Champions League, confermando ancora una volta la loro mentalità europea. 
-      Nel secondo tempo il Bayern prova a reagire, ma le ripartenze di Ancelotti sono letali. Ora il Real attende la vincente tra Arsenal e Inter.`,
-    },
-    {
-      id: "2",
-      title: "Serie A: la Roma sogna la Champions",
-      image:
-        "https://images.pexels.com/photos/46798/the-ball-stadion-football-the-pitch-46798.jpeg?auto=compress&cs=tinysrgb&w=800",
-      date: "13 ottobre 2025",
-      content: `La Roma supera l'Atalanta e continua la rincorsa al quarto posto. 
-      Dybala e Lukaku trascinano la squadra di De Rossi, che ora si trova a un solo punto dal Napoli. 
-      I giallorossi dimostrano maturità e compattezza difensiva, fondamentali in vista del finale di stagione.`,
-    },
-  ];
+  const article = news.find((item) => item.id === id);
+  let timeLabel = article.publishedAt.toLocaleString("it-IT", {
+                weekday: "short",
+                day: "2-digit",
+                month: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+              });
 
-  const article = newsList.find((item) => item.id === id);
-
-  if (!article) {
+  if (article) {
     return (
       <View style={[styles.container, { backgroundColor: colors.background, justifyContent: "center", alignItems: "center" }]}>
         <Text style={[styles.errorText, { color: colors.textSecondary, fontFamily: fonts.regular }]}>
@@ -52,7 +49,7 @@ export default function NewsDetail() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}
       >
-        <Image source={{ uri: article.image }} style={styles.image} />
+        <Image source={{ uri: article.urlToImage }} style={styles.image} />
 
         <Text
           style={[
@@ -69,7 +66,7 @@ export default function NewsDetail() {
             { color: colors.textSecondary, fontFamily: fonts.regular },
           ]}
         >
-          {article.date}
+          {timeLabel}
         </Text>
 
         <Text

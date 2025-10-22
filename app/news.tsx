@@ -1,53 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native";
 import { useTheme } from "./theme";
 import Header from "../components/Header";
 import { useRouter } from "expo-router";
 import type { Href } from "expo-router";
+import { getFootballNews } from "@/services/newsApi";
+import LeagueSelector from "@/components/LeagueSelector";
+
+type LeagueName = "Serie A" | "Premier League" | "LaLiga";
 
 export default function NewsPage() {
   const { colors, fonts } = useTheme();
+  const [selectedLeague, setSelectedLeague] = useState<LeagueName>("Serie A");
+
+  const leagues: LeagueName[] = ["Serie A", "Premier League", "LaLiga"];
   const router = useRouter();
 
-  // Mock notizie (stesse del carosello + più contenuti)
-  const newsList = [
-    {
-      id: 1,
-      title: "Champions League: serata di gol e spettacolo",
-      excerpt:
-        "Il Real Madrid travolge il Bayern e vola in finale con una prestazione scintillante di Vinicius e Bellingham.",
-      image:
-        "https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg?auto=compress&cs=tinysrgb&w=800",
-      time: "1h fa",
-    },
-    {
-      id: 2,
-      title: "Serie A: la Roma sogna la Champions",
-      excerpt:
-        "La squadra di De Rossi supera l'Atalanta e ora punta con decisione al quarto posto. Dybala decisivo dal dischetto.",
-      image:
-        "https://images.pexels.com/photos/46798/the-ball-stadion-football-the-pitch-46798.jpeg?auto=compress&cs=tinysrgb&w=800",
-      time: "3h fa",
-    },
-    {
-      id: 3,
-      title: "Premier League: lotta serrata in vetta",
-      excerpt:
-        "City e Arsenal continuano la corsa punto a punto per il titolo. Guardiola: 'Non possiamo più sbagliare nulla'.",
-      image:
-        "https://images.pexels.com/photos/274422/pexels-photo-274422.jpeg?auto=compress&cs=tinysrgb&w=800",
-      time: "5h fa",
-    },
-    {
-      id: 4,
-      title: "Europa League: la Fiorentina sogna in grande",
-      excerpt:
-        "Vittoria importante per la Viola che mette un piede in semifinale. Italiano: 'Serve umiltà, ma possiamo arrivare in fondo'.",
-      image:
-        "https://images.pexels.com/photos/46798/the-ball-stadion-football-the-pitch-46798.jpeg?auto=compress&cs=tinysrgb&w=800",
-      time: "1 giorno fa",
-    },
-  ];
+  const [news, setNews] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      const data = await getFootballNews(selectedLeague);
+      setNews(data);
+    };
+    fetchNews();
+  }, [selectedLeague]);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -56,61 +33,91 @@ export default function NewsPage() {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.content, { gap: 16, }]}
+        contentContainerStyle={[styles.content]}
       >
-        {newsList.map((item) => (
-          <TouchableOpacity
-            key={item.id}
-            activeOpacity={0.9}
-            style={[styles.card, { backgroundColor: colors.primary }]}
-            onPress={() => router.push((`/news/${String(item.id)}`) as Href)}
 
-          >
-            <Image source={{ uri: item.image }} style={styles.image} />
-            <View style={styles.textContainer}>
-              <View style={styles.headerRow}>
-                <Text
-                  style={[
-                    styles.title,
-                    { color: colors.text, fontFamily: fonts.medium },
-                  ]}
-                >
-                  {item.title}
-                </Text>
-                <Text
-                  style={[
-                    styles.time,
-                    { color: colors.textSecondary, fontFamily: fonts.regular },
-                  ]}
-                >
-                  {item.time}
-                </Text>
-              </View>
-              <Text
-                numberOfLines={3}
-                style={[
-                  styles.excerpt,
-                  { color: colors.textSecondary, fontFamily: fonts.regular },
-                ]}
-              >
-                {item.excerpt}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+        <Text
+          style={{
+            color: colors.text,
+            fontFamily: fonts.bold,
+            fontSize: 26,
+            marginTop: 24,
+          }}
+        >
+          Notizie
+        </Text>
 
-        {newsList.length === 0 && (
-          <Text
-            style={{
-              color: colors.textSecondary,
-              fontFamily: fonts.regular,
-              textAlign: "center",
-              marginTop: 40,
-            }}
-          >
-            Nessuna notizia disponibile 📰
-          </Text>
-        )}
+        <View>
+          <LeagueSelector
+            leagues={leagues}
+            selectedLeague={selectedLeague}
+            onSelect={(league) => setSelectedLeague(league as LeagueName)}
+          />
+        </View>
+        <View style={[{ marginTop: 16, gap: 16 }]}>
+          {news.length > 0 ? (
+            news.map((item, index) => {
+              const date = new Date(item.publishedAt);
+              const timeLabel = date.toLocaleString("it-IT", {
+                weekday: "short",
+                day: "2-digit",
+                month: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+              return (
+                <TouchableOpacity
+                  key={index}
+                  activeOpacity={0.9}
+                  style={[styles.card, { backgroundColor: colors.primary }]}
+                  onPress={() => router.push((`/news/${String(item.id)}`) as Href)}
+
+                >
+                  <Image source={{ uri: item.urlToImage }} style={styles.image} />
+                  <View style={styles.textContainer}>
+                    <View style={[{ gap: 8, }]}>
+                      <Text
+                        style={[
+                          styles.title,
+                          { color: colors.text, fontFamily: fonts.medium },
+                        ]}
+                      >
+                        {item.title}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.time,
+                          { color: colors.textSecondary, fontFamily: fonts.regular },
+                        ]}
+                      >
+                        {timeLabel}
+                      </Text>
+                    </View>
+                    <Text
+                      numberOfLines={3}
+                      style={[
+                        styles.excerpt,
+                        { color: colors.textSecondary, fontFamily: fonts.regular },
+                      ]}
+                    >
+                      {item.description}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })) : (
+            <Text
+              style={{
+                color: colors.textSecondary,
+                fontFamily: fonts.regular,
+                textAlign: "center",
+                marginTop: 40,
+              }}
+            >
+              Nessuna notizia disponibile 📰
+            </Text>
+          )}
+        </View>
       </ScrollView>
     </View>
   );
@@ -121,7 +128,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    marginTop: 24,
     paddingHorizontal: 16,
     marginBottom: 24,
   },
@@ -135,17 +141,13 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     padding: 16,
-  },
-  headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: 8,
+    flex: 1,
+    flexDirection: "column",
+    gap: 8,
   },
   title: {
     fontSize: 18,
     flex: 1,
-    paddingRight: 8,
   },
   time: {
     fontSize: 13,
