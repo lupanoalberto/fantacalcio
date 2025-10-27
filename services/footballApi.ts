@@ -49,13 +49,8 @@ export async function getMatches(leagueName: string) {
 
     if (!res.ok) throw new Error(`Errore API: ${res.status}`);
 
-    const data = await res.json();
-    // Filtra solo partite in corso
-    const matches = data.matches.filter(
-      (m: any) => m.status === "FINISHED" || m.status === "POSTPONED"
-    );
-
-    return matches;
+    let data = await res.json();
+    return data.matches;
   } catch (err) {
     console.error("Errore fetch partite:", err);
     return [];

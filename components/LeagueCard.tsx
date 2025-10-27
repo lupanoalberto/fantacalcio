@@ -3,15 +3,16 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../app/theme";
+import { Colors } from "@/constants/colors";
 
 type LeagueCardProps = {
   name: string;
   teamsCount: number;
-  nextMatch?: string;
+  team?: string;
   onPress?: () => void;
 };
 
-export default function LeagueCard({ name, teamsCount, nextMatch, onPress }: LeagueCardProps) {
+export default function LeagueCard({ name, teamsCount, team, onPress }: LeagueCardProps) {
   const { colors, fonts } = useTheme();
 
   return (
@@ -27,15 +28,15 @@ export default function LeagueCard({ name, teamsCount, nextMatch, onPress }: Lea
         <Ionicons name="chevron-forward-outline" size={18} color={colors.textSecondary} />
       </View>
 
+      {team && (
+        <Text style={[styles.detail, { color: colors.success, fontFamily: fonts.medium }]}>
+          {team}
+        </Text>
+      )}
+
       <Text style={[styles.detail, { color: colors.textSecondary, fontFamily: fonts.regular }]}>
         Squadre: {teamsCount}
       </Text>
-
-      {nextMatch && (
-        <Text style={[styles.detail, { color: colors.success, fontFamily: fonts.regular }]}>
-          Prossima partita: {nextMatch}
-        </Text>
-      )}
     </TouchableOpacity>
   );
 }
@@ -44,19 +45,22 @@ const styles = StyleSheet.create({
   card: {
     width: "100%",
     borderRadius: 8,
-    padding: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: Colors.secondary,
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 8,
+    marginBottom: 4,
   },
   name: {
-    fontSize: 18,
+    fontSize: 14,
   },
   detail: {
-    fontSize: 13,
+    fontSize: 12,
   },
 });

@@ -42,48 +42,33 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
   return (
     <View style={styles.container}>
 
-      <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.medium }]}>
+      <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.bold }]}>
         Partite in live
       </Text>
 
       {loading ? (
-        <ActivityIndicator size="small" color={colors.success} style={{ marginTop: 16 }} />
+        <ActivityIndicator size="small" color={colors.success} />
       ) : (
-        <View style={[styles.matches, { gap: 16 }]}>
+        <View style={[{ gap: 16 }]}>
           {matches.length > 0 ? (
             matches.map((match, idx) => {
-              const status = match?.status;
-              const date = new Date(match?.utcDate);
-              
+          const status = match?.status;
+          let timeLabel = "";
 
-              let timeLabel = "";
+          if (status === "IN_PLAY") {
+            timeLabel = "LIVE";
+          }
+          else if (status === "PAUSED") {
+            timeLabel = "INT.";
+          }
 
-              if (status === "IN_PLAY") {
-                timeLabel = "LIVE";
-              }
-              else if (status === "PAUSED") {
-                timeLabel = "HT";
-              }
-              else if (status === "FINISHED") {
-                timeLabel = "FT";
-              }
-              else if (status === "TIMED" || status === "SCHEDULED") {
-                timeLabel = date.toLocaleString("it-IT", {
-                  weekday: "short",
-                  day: "2-digit",
-                  month: "2-digit",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                });
-              }
+          let scoreHome = match?.score?.fullTime?.home;
+          let scoreAway = match?.score?.fullTime?.away;
 
-              let scoreHome = match?.score?.fullTime?.home;
-              let scoreAway = match?.score?.fullTime?.away;
-
-              if (scoreHome === null && scoreAway === null) {
-                scoreHome = "";
-                scoreAway = "";
-              }
+          if (scoreHome === null && scoreAway === null) {
+            scoreHome = "-";
+            scoreAway = "-";
+          }
 
               const homeLogo =
                 match?.homeTeam?.crest ||
@@ -102,7 +87,8 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
                   key={`${selectedLeague}-${match?.id ?? idx}`}
                   homeTeam={match?.homeTeam?.name ?? "—"}
                   awayTeam={match?.awayTeam?.name ?? "—"}
-                  score={`${scoreHome} - ${scoreAway}`}
+                  scoreHome={scoreHome}
+                  scoreAway={scoreAway}
                   time={timeLabel}
                   homeLogo={homeLogo}
                   awayLogo={awayLogo}
@@ -116,8 +102,7 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
                 color: colors.textSecondary,
                 fontFamily: fonts.regular,
                 textAlign: "center",
-                marginTop: 8,
-                fontSize: 13,
+                fontSize: 12,
               }}
             >
               Nessuna partita in live
@@ -130,7 +115,6 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: { width: "100%", marginTop: 8 },
-  sectionTitle: { fontSize: 18, marginBottom: 8 },
-  matches: { marginTop: 4 },
+  container: { width: "100%", paddingHorizontal: 16, },
+  sectionTitle: { fontSize: 16, marginBottom: 4 },
 });

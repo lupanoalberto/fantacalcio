@@ -2,6 +2,7 @@
 import React from "react";
 import { ScrollView, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { useTheme } from "../app/theme";
+import { Colors } from "@/constants/colors";
 
 type LeagueSelectorProps = {
   leagues: string[];
@@ -20,7 +21,6 @@ export default function LeagueSelector({
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      style={styles.container}
       contentContainerStyle={styles.content}
     >
       {leagues.map((league) => {
@@ -30,17 +30,12 @@ export default function LeagueSelector({
             key={league}
             onPress={() => onSelect(league)}
             activeOpacity={0.8}
-            style={[
-              styles.button,
-              {
-                backgroundColor: isActive ? colors.success : colors.secondary,
-              },
-            ]}
+            style={styles.button}
           >
             <Text
               style={{
-                color: isActive ? colors.background : colors.text,
-                fontFamily: fonts.medium,
+                color: isActive ? colors.success : colors.text,
+                fontFamily: fonts.medium, fontSize: 12,
               }}
             >
               {league}
@@ -53,12 +48,13 @@ export default function LeagueSelector({
 }
 
 const styles = StyleSheet.create({
-  container: { marginTop: 16 },
-  content: { gap: 16 },
+  content: { gap: 16, paddingHorizontal: 16 },
   button: {
-    fontSize: 13,
-    paddingVertical: 8,
+    backgroundColor: Colors.primary,
+    borderWidth: 1,
+    borderColor: Colors.secondary,
+    paddingVertical: 12,
     paddingHorizontal: 16,
-    borderRadius: 24,
+    borderRadius: 8,
   },
 });

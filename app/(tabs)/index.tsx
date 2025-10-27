@@ -19,8 +19,8 @@ export default function HomeTab() {
 
   // Mock leghe
   const leaguesFanta = [
-    { id: 1, name: "Lega Amici del Calcetto", teamsCount: 10, nextMatch: "20 Ottobre" },
-    { id: 2, name: "Serie Fantacampioni", teamsCount: 8, nextMatch: "21 Ottobre" },
+    { id: 1, name: "Lega Amici del Calcetto", teamsCount: 10, team: "AL LEGRI" },
+    { id: 2, name: "Serie Fantacampioni", teamsCount: 8, team: "LO PICCHIO" },
   ];
 
   const handleAddLeague = () => {
@@ -38,22 +38,17 @@ export default function HomeTab() {
 
       {/* CONTENUTO */}
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <Text style={[styles.title, { color: colors.text, fontFamily: fonts.bold }]}>
-          Fantacalcio Europeo
-        </Text>
-
-        <Text
-          style={[
-            styles.subtitle,
-            { color: colors.textSecondary, fontFamily: fonts.regular },
-          ]}
-        >
-          Gestisci la tua squadra, segui le partite e domina la classifica ⚽
-        </Text>
+        <View>
+          <LeagueSelector
+            leagues={leagues}
+            selectedLeague={selectedLeague}
+            onSelect={(league) => setSelectedLeague(league as LeagueName)}
+          />
+        </View>
 
         {/* SEZIONE LEGHE */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.medium }]}>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.bold }]}>
             Le tue leghe
           </Text>
 
@@ -62,7 +57,7 @@ export default function HomeTab() {
               key={league.id}
               name={league.name}
               teamsCount={league.teamsCount}
-              nextMatch={league.nextMatch}
+              team={league.team}
               onPress={() => Alert.alert("Lega", `Hai aperto ${league.name}`)}
             />
           ))}
@@ -80,14 +75,6 @@ export default function HomeTab() {
           </TouchableOpacity>
         </View>
 
-        <View style={ [{paddingTop: 8,}] }>
-          <LeagueSelector
-                  leagues={leagues}
-                  selectedLeague={selectedLeague}
-                  onSelect={(league) => setSelectedLeague(league as LeagueName)}
-                />
-        </View>
-
         <View>
           <LiveMatchesSection selectedLeague={selectedLeague} />
         </View>
@@ -95,7 +82,7 @@ export default function HomeTab() {
         <View>
           <NewsCarousel selectedLeague={selectedLeague} />
         </View>
-          
+
       </ScrollView>
     </View>
   );
@@ -103,13 +90,11 @@ export default function HomeTab() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  scrollContent: { paddingTop: 24, paddingHorizontal: 16, paddingBottom: 24 },
-  title: { fontSize: 26, marginBottom: 4, textAlign: "center" },
-  subtitle: { fontSize: 13, textAlign: "center", marginBottom: 24 },
-  section: { width: "100%", },
-  sectionTitle: { fontSize: 18, marginBottom: 8, },
+  scrollContent: { paddingTop: 8, paddingBottom: 16 },
+  section: { width: "100%", padding: 16 },
+  sectionTitle: { fontSize: 16, marginBottom: 4, },
   addButton: {
-    paddingVertical: 8,
+    paddingVertical: 12,
     borderWidth: 1,
     borderRadius: 8,
     alignItems: "center",
@@ -117,5 +102,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 8,
   },
-  addButtonText: { fontSize: 13 },
+  addButtonText: { fontSize: 12 },
 });

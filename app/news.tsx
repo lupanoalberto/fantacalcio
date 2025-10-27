@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import type { Href } from "expo-router";
 import { getFootballNews } from "@/services/newsApi";
 import LeagueSelector from "@/components/LeagueSelector";
+import { Colors } from "@/constants/colors";
 
 type LeagueName = "Serie A" | "Premier League" | "LaLiga";
 
@@ -35,17 +36,6 @@ export default function NewsPage() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[styles.content]}
       >
-
-        <Text
-          style={{
-            color: colors.text,
-            fontFamily: fonts.bold,
-            fontSize: 26,
-            marginTop: 24,
-          }}
-        >
-          Notizie
-        </Text>
 
         <View>
           <LeagueSelector
@@ -128,33 +118,36 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    paddingHorizontal: 16,
-    marginBottom: 24,
+    paddingTop: 8,
+    paddingHorizontal: 0,
+    marginBottom: 16,
   },
   card: {
     borderRadius: 8,
     overflow: "hidden",
+    marginHorizontal: 16,
+    borderWidth: 1,
+    borderColor: Colors.secondary,
   },
   image: {
     width: "100%",
     height: 180,
   },
   textContainer: {
-    padding: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     flex: 1,
     flexDirection: "column",
     gap: 8,
   },
   title: {
-    fontSize: 18,
+    fontSize: 14,
     flex: 1,
   },
   time: {
-    fontSize: 13,
-    opacity: 0.8,
+    fontSize: 12,
   },
   excerpt: {
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: 12,
   },
 });

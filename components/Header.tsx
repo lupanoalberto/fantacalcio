@@ -30,7 +30,6 @@ export default function Header({
         styles.container,
         {
           backgroundColor: colors.background,
-          borderBottomColor: colors.secondary,
           paddingTop: insets.top + 8,
         },
       ]}
@@ -82,7 +81,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingBottom: 8,
-    borderBottomWidth: 1,
     position: "sticky", 
     top: 0, 
     left: 0, 
@@ -95,7 +93,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   title: {
-    fontSize: 18,
+    fontSize: 16,
   },
   icons: {
     flexDirection: "row",

@@ -10,6 +10,7 @@ import {
 import { useTheme } from "../theme";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "@/components/Header";
+import { Colors } from "@/constants/colors";
 
 export default function AccountPage() {
   const { colors, fonts } = useTheme();
@@ -19,124 +20,124 @@ export default function AccountPage() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-        {/* HEADER */}
-          <Header
-            title="Fantacalcio"
-            showBackArrow={false}
-          />
-    <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 24 }}
-    >
-      {/* ================== SEZIONE INFORMAZIONI PERSONALI ================== */}
-      <Text
-        style={[
-          styles.sectionTitle,
-          { color: colors.text, fontFamily: fonts.medium },
-        ]}
+      {/* HEADER */}
+      <Header
+        title="Fantacalcio"
+        showBackArrow={false}
+      />
+      <ScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 16 }}
       >
-        Informazioni personali
-      </Text>
+        {/* ================== SEZIONE INFORMAZIONI PERSONALI ================== */}
+        <Text
+          style={[
+            styles.sectionTitle,
+            { color: colors.text, fontFamily: fonts.bold, marginTop: 8 },
+          ]}
+        >
+          Informazioni personali
+        </Text>
 
-      <View style={[styles.card, { backgroundColor: colors.primary, gap: 8, }]}>
-        <View style={styles.row}>
-          <Text style={[styles.label, { color: colors.textSecondary }]}>Nome</Text>
-          <Text style={[styles.value, { color: colors.text }]}>Alberto Lupano</Text>
+        <View style={[styles.card, { backgroundColor: colors.primary, gap: 8, }]}>
+          <View style={styles.row}>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>Nome</Text>
+            <Text style={[styles.value, { color: colors.text }]}>Alberto Lupano</Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>Email</Text>
+            <Text style={[styles.value, { color: colors.text }]}>alberto@gmail.com</Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>Password</Text>
+            <Text style={[styles.value, { color: colors.text }]}>********</Text>
+          </View>
+
+          <TouchableOpacity activeOpacity={0.8} style={styles.editButton}>
+            <Ionicons name="pencil-outline" size={16} color={colors.success} />
+            <Text
+              style={{
+                color: colors.success,
+                fontFamily: fonts.medium,
+                fontSize: 13,
+                marginLeft: 4,
+              }}
+            >
+              Modifica
+            </Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.row}>
-          <Text style={[styles.label, { color: colors.textSecondary }]}>Email</Text>
-          <Text style={[styles.value, { color: colors.text }]}>alberto@gmail.com</Text>
+        {/* ================== SEZIONE PRIVACY E PERMESSI ================== */}
+        <Text
+          style={[
+            styles.sectionTitle,
+            { color: colors.text, fontFamily: fonts.bold, marginTop: 16 },
+          ]}
+        >
+          Privacy e permessi
+        </Text>
+
+        <View style={[styles.card, { backgroundColor: colors.primary, }]}>
+          <View style={styles.switchRow}>
+            <Text style={[styles.switchLabel, { color: colors.text }]}>
+              Notifiche push
+            </Text>
+            <Switch
+              value={notificationsEnabled}
+              onValueChange={setNotificationsEnabled}
+              trackColor={{ false: colors.secondary, true: colors.success }}
+              thumbColor={colors.text}
+            />
+          </View>
+
+          <View style={styles.switchRow}>
+            <Text style={[styles.switchLabel, { color: colors.text }]}>
+              Condividi dati di utilizzo
+            </Text>
+            <Switch
+              value={shareData}
+              onValueChange={setShareData}
+              trackColor={{ false: colors.secondary, true: colors.success }}
+              thumbColor={colors.text}
+            />
+          </View>
         </View>
 
-        <View style={styles.row}>
-          <Text style={[styles.label, { color: colors.textSecondary }]}>Password</Text>
-          <Text style={[styles.value, { color: colors.text }]}>********</Text>
+        {/* ================== SEZIONE ALTRO ================== */}
+        <Text
+          style={[
+            styles.sectionTitle,
+            { color: colors.text, fontFamily: fonts.bold, marginTop: 16 },
+          ]}
+        >
+          Altro
+        </Text>
+
+        <View style={[styles.card, { backgroundColor: colors.primary, gap: 16, }]}>
+          <TouchableOpacity activeOpacity={0.8} style={styles.optionRow}>
+            <Ionicons name="document-text-outline" size={18} color={colors.textSecondary} />
+            <Text style={[styles.optionText, { color: colors.text }]}>
+              Termini e condizioni
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity activeOpacity={0.8} style={styles.optionRow}>
+            <Ionicons name="chatbubble-ellipses-outline" size={18} color={colors.textSecondary} />
+            <Text style={[styles.optionText, { color: colors.text }]}>
+              Invia feedback
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity activeOpacity={0.8} style={styles.optionRow}>
+            <Ionicons name="log-out-outline" size={18} color={colors.error} />
+            <Text style={[styles.optionText, { color: colors.error }]}>Esci</Text>
+          </TouchableOpacity>
         </View>
-
-        <TouchableOpacity activeOpacity={0.8} style={styles.editButton}>
-          <Ionicons name="pencil-outline" size={16} color={colors.success} />
-          <Text
-            style={{
-              color: colors.success,
-              fontFamily: fonts.medium,
-              fontSize: 13,
-              marginLeft: 4,
-            }}
-          >
-            Modifica
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* ================== SEZIONE PRIVACY E PERMESSI ================== */}
-      <Text
-        style={[
-          styles.sectionTitle,
-          { color: colors.text, fontFamily: fonts.medium },
-        ]}
-      >
-        Privacy e permessi
-      </Text>
-
-      <View style={[styles.card, { backgroundColor: colors.primary, gap: 8, }]}>
-        <View style={styles.switchRow}>
-          <Text style={[styles.switchLabel, { color: colors.text }]}>
-            Notifiche push
-          </Text>
-          <Switch
-            value={notificationsEnabled}
-            onValueChange={setNotificationsEnabled}
-            trackColor={{ false: colors.secondary, true: colors.success }}
-            thumbColor={colors.text}
-          />
-        </View>
-
-        <View style={styles.switchRow}>
-          <Text style={[styles.switchLabel, { color: colors.text }]}>
-            Condividi dati di utilizzo
-          </Text>
-          <Switch
-            value={shareData}
-            onValueChange={setShareData}
-            trackColor={{ false: colors.secondary, true: colors.success }}
-            thumbColor={colors.text}
-          />
-        </View>
-      </View>
-
-      {/* ================== SEZIONE ALTRO ================== */}
-      <Text
-        style={[
-          styles.sectionTitle,
-          { color: colors.text, fontFamily: fonts.medium },
-        ]}
-      >
-        Altro
-      </Text>
-
-      <View style={[styles.card, { backgroundColor: colors.primary, gap: 16, }]}>
-        <TouchableOpacity activeOpacity={0.8} style={styles.optionRow}>
-          <Ionicons name="document-text-outline" size={18} color={colors.textSecondary} />
-          <Text style={[styles.optionText, { color: colors.text }]}>
-            Termini e condizioni
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity activeOpacity={0.8} style={styles.optionRow}>
-          <Ionicons name="chatbubble-ellipses-outline" size={18} color={colors.textSecondary} />
-          <Text style={[styles.optionText, { color: colors.text }]}>
-            Invia feedback
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity activeOpacity={0.8} style={styles.optionRow}>
-          <Ionicons name="log-out-outline" size={18} color={colors.error} />
-          <Text style={[styles.optionText, { color: colors.error }]}>Esci</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+      </ScrollView>
     </View>
   );
 }
@@ -146,26 +147,32 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   sectionTitle: {
-    fontSize: 18,
-    marginTop: 24,
-    marginBottom: 8,
+    fontSize: 16,
+    marginBottom: 4,
     paddingHorizontal: 16,
   },
   card: {
+    flexDirection: "column",
+    alignItems: "center",
     borderRadius: 8,
-    padding: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    gap: 8,
+    borderWidth: 1,
+    borderColor: Colors.secondary,
     marginHorizontal: 16,
   },
   row: {
+    width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
   label: {
-    fontSize: 13,
+    fontSize: 12,
   },
   value: {
-    fontSize: 13,
+    fontSize: 12,
   },
   editButton: {
     flexDirection: "row",
@@ -174,19 +181,21 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
   },
   switchRow: {
+    width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
   switchLabel: {
-    fontSize: 13,
+    fontSize: 12,
   },
   optionRow: {
+    width: "100%",
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
   },
   optionText: {
-    fontSize: 13,
+    fontSize: 12,
   },
 });

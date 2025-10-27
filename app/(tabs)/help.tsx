@@ -10,6 +10,7 @@ import {
 import { useTheme } from "../theme";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "../../components/Header";
+import { Colors } from "@/constants/colors";
 
 export default function HelpPage() {
   const { colors, fonts } = useTheme();
@@ -61,16 +62,14 @@ export default function HelpPage() {
         showBackArrow={false}
       />
     <ScrollView
-      style={styles.container}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 24 }}
     >
 
       {/* ===================== SEZIONE FAQ ===================== */}
       <Text
         style={[
           styles.sectionTitle,
-          { color: colors.text, fontFamily: fonts.medium },
+          { color: colors.text, fontFamily: fonts.bold, marginTop: 8, },
         ]}
       >
         Domande frequenti
@@ -120,7 +119,7 @@ export default function HelpPage() {
       <Text
         style={[
           styles.sectionTitle,
-          { color: colors.text, fontFamily: fonts.medium, },
+          { color: colors.text, fontFamily: fonts.bold, marginTop: 16, },
         ]}
       >
         Contatti
@@ -130,7 +129,7 @@ export default function HelpPage() {
         <TouchableOpacity
           onPress={() => Linking.openURL("mailto:support@fantacalcioapp.com")}
           activeOpacity={0.8}
-          style={[styles.contactCard, { backgroundColor: colors.primary }]}
+          style={[styles.card, { backgroundColor: colors.primary }]}
         >
           <Ionicons name="mail-outline" size={24} color={colors.success} />
           <Text
@@ -146,7 +145,7 @@ export default function HelpPage() {
         <TouchableOpacity
           onPress={() => openLink("https://instagram.com")}
           activeOpacity={0.8}
-          style={[styles.contactCard, { backgroundColor: colors.primary }]}
+          style={[styles.card, { backgroundColor: colors.primary }]}
         >
           <Ionicons name="logo-instagram" size={20} color={colors.success} />
           <Text
@@ -164,19 +163,19 @@ export default function HelpPage() {
       <Text
         style={[
           styles.sectionTitle,
-          { color: colors.text, fontFamily: fonts.medium },
+          { color: colors.text, fontFamily: fonts.bold, marginTop: 16, },
         ]}
       >
         Video tutorial
       </Text>
 
-      <View style={[{ paddingHorizontal: 16, gap: 16, }]}>
+      <View style={[{ paddingHorizontal: 16, gap: 16, paddingBottom: 16 }]}>
         {videos.map((vid) => (
           <TouchableOpacity
             key={vid.id}
             onPress={() => openLink(vid.url)}
             activeOpacity={0.85}
-            style={[styles.videoCard, { backgroundColor: colors.primary }]}
+            style={[styles.card, { backgroundColor: colors.primary }]}
           >
             <Ionicons name="play-circle-outline" size={24} color={colors.success} />
             <Text
@@ -200,49 +199,48 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   sectionTitle: {
-    fontSize: 18,
-    marginTop: 24,
-    marginBottom: 8,
+    fontSize: 16,
+    marginBottom: 4,
     paddingHorizontal: 16,
   },
   faqCard: {
+    flexDirection: "column",
+    alignItems: "center",
     borderRadius: 8,
-    padding: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    gap: 12,
+    borderWidth: 1,
+    borderColor: Colors.secondary,
   },
   faqHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    paddingHorizontal: 16,
+    gap: 8,
   },
   faqQuestion: {
-    fontSize: 13,
-    flex: 1,
-    marginRight: 8,
+    fontSize: 12,
   },
   faqAnswer: {
-    fontSize: 13,
-    lineHeight: 18,
-    marginTop: 8,
-  },
-  contactCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderRadius: 8,
-    padding: 14,
-    gap: 8,
+    fontSize: 12,
   },
   contactText: {
-    fontSize: 13,
+    fontSize: 12,
   },
-  videoCard: {
+  card: {
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 8,
-    padding: 14,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     gap: 8,
+    borderWidth: 1,
+    borderColor: Colors.secondary,
   },
   videoTitle: {
-    fontSize: 13,
+    fontSize: 12,
     flexShrink: 1,
   },
 });

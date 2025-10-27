@@ -5,6 +5,7 @@ import { useTheme } from "./theme";
 import Header from "../components/Header";
 import { useRouter } from "expo-router";
 import { Href } from "expo-router";
+import { Colors } from "@/constants/colors";
 
 export default function Notifications() {
   const { colors, fonts } = useTheme();
@@ -79,7 +80,6 @@ export default function Notifications() {
               color: colors.textSecondary,
               fontFamily: fonts.regular,
               textAlign: "center",
-              marginTop: 40,
             }}
           >
             Nessuna notifica al momento 🔔
@@ -95,13 +95,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    marginTop: 24,
+    marginTop: 8,
     paddingHorizontal: 16,
-    paddingBottom: 24,
+    paddingBottom: 16,
   },
   card: {
-    padding: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.secondary,
   },
   cardHeader: {
     flexDirection: "row",
@@ -110,14 +113,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   title: {
-    fontSize: 18,
+    fontSize: 14,
   },
   time: {
-    fontSize: 13,
-    opacity: 0.8,
+    fontSize: 12,
   },
   message: {
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: 12,
   },
 });

@@ -12,6 +12,8 @@ import { useTheme } from "../app/theme";
 import { useRouter } from "expo-router";
 import type { Href } from "expo-router";
 import { getFootballNews } from "@/services/newsApi";
+import { Colors } from "@/constants/colors";
+import { Ionicons } from "@expo/vector-icons";
 const { width } = Dimensions.get("window");
 
 type Props = {
@@ -35,29 +37,15 @@ export default function NewsCarousel({ selectedLeague }: Props) {
   return (
     <View style={styles.container}>
       {/* TITOLO SEZIONE */}
-      <View style={styles.headerRow}>
+      <View>
         <Text
           style={[
             styles.sectionTitle,
-            { color: colors.text, fontFamily: fonts.medium },
+            { color: colors.text, fontFamily: fonts.bold },
           ]}
         >
           Notizie dal campo
         </Text>
-
-        <TouchableOpacity
-          onPress={() => router.push("/news")}
-          activeOpacity={0.8}
-        >
-          <Text
-            style={[
-              styles.linkText,
-              { color: colors.success, fontFamily: fonts.medium },
-            ]}
-          >
-            Vedi tutte →
-          </Text>
-        </TouchableOpacity>
 
       </View>
 
@@ -65,7 +53,7 @@ export default function NewsCarousel({ selectedLeague }: Props) {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ gap: 16 }}
+        contentContainerStyle={{ gap: 16, paddingRight: 16, alignItems: "center", }}
       >
         {news.map((news, index) => (
           <TouchableOpacity
@@ -97,6 +85,18 @@ export default function NewsCarousel({ selectedLeague }: Props) {
             </View>
           </TouchableOpacity>
         ))}
+        <View>
+          <TouchableOpacity
+            onPress={() => router.push("/news")}
+            style={[styles.button, { borderColor: colors.secondary, backgroundColor: colors.primary, }]}
+            activeOpacity={0.8}
+          >
+            <Text style={[styles.buttonText, { color: colors.text, fontFamily: fonts.medium }]}>
+              Vedi tutte
+            </Text>
+            <Ionicons name="chevron-forward" size={16} color={colors.text} />
+          </TouchableOpacity>
+        </View>
       </ScrollView>
 
     </View>
@@ -107,32 +107,40 @@ const CARD_WIDTH = width * 0.7;
 const IMAGE_HEIGHT = width * 0.7 * 9 / 16;
 
 const styles = StyleSheet.create({
-  container: { marginTop: 24 },
-  headerRow: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  container: {
+    paddingLeft: 16,
+    paddingTop: 16,
   },
   sectionTitle: {
-    fontSize: 18,
-    marginBottom: 8,
+    fontSize: 16,
+    marginBottom: 4,
   },
   card: {
     borderRadius: 8,
     overflow: "hidden",
     width: CARD_WIDTH,
+    borderWidth: 1,
+    borderColor: Colors.secondary,
   },
   image: {
     width: "100%",
     height: IMAGE_HEIGHT,
   },
   textContainer: {
-    padding: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
   },
-  title: { fontSize: 18, marginBottom: 4 },
-  excerpt: { fontSize: 13, opacity: 0.8 },
-  linkText: {
-    fontSize: 13,
+  title: { fontSize: 14 },
+  excerpt: { fontSize: 12 },
+  button: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    gap: 8,
   },
+  buttonText: { fontSize: 12 },
 });

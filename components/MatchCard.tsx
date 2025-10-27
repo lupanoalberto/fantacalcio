@@ -2,29 +2,26 @@ import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { useTheme } from "../app/theme";
 import { Colors } from "@/constants/colors";
+import { Ionicons } from "@expo/vector-icons";
 
 type MatchCardProps = {
   homeTeam: string;
   awayTeam: string;
-  score: string;
+  scoreHome: string;
+  scoreAway: string;
   time?: string;
   homeLogo?: string;
   awayLogo?: string;
-  homeWin?: string;
-  draw?: string;
-  awayWin?: string;
 };
 
 export default function MatchCard({
   homeTeam,
   awayTeam,
-  score,
+  scoreHome,
+  scoreAway,
   time,
   homeLogo,
   awayLogo,
-  homeWin,
-  draw,
-  awayWin,
 }: MatchCardProps) {
   const { colors, fonts } = useTheme();
 
@@ -34,7 +31,7 @@ export default function MatchCard({
 
   const normalizedTime = time?.toUpperCase?.() ?? "";
 
-  if (normalizedTime.includes("LIVE") || normalizedTime.includes("HT")) {
+  if (normalizedTime.includes("LIVE") || normalizedTime.includes("INT.")) {
     scoreColor = colors.success; // verde per LIVE
     timeColor = colors.success;
   } else if (["POSTPONED", "SUSPENDED", "CANCELLED"].some((w) => normalizedTime.includes(w))) {
@@ -44,11 +41,20 @@ export default function MatchCard({
 
   return (
     <View style={[styles.card, { backgroundColor: colors.primary }]}>
-      {/* Riga centrale con squadre e risultato */}
+      <View style={styles.row}>
+        {/* Orario o stato match */}
+        {time && (
+          <Text style={[styles.time, { color: timeColor, fontFamily: fonts.regular }]}>
+            {time}
+          </Text>
+        )}
+        <Ionicons name="chevron-forward-outline" color={colors.textSecondary} size={18} />
+      </View>
+
       <View style={styles.row}>
         {/* Squadra di casa */}
         <View style={[styles.teamContainer, { justifyContent: "flex-start" }]}>
-          {homeLogo && <Image source={{ uri: homeLogo }} style={styles.logoLeft} />}
+          {homeLogo && <Image source={{ uri: homeLogo }} style={styles.logo} />}
           <Text
             style={[styles.team, { color: colors.text, fontFamily: fonts.medium }]}
             numberOfLines={1}
@@ -57,42 +63,28 @@ export default function MatchCard({
             {homeTeam}
           </Text>
         </View>
+        <Text style={[styles.score, { color: scoreColor, fontFamily: fonts.medium }]}>
+          {scoreHome}
+        </Text>
+      </View>
 
-        {/* Risultato */}
-        <View style={styles.scoreContainer}>
-          <Text style={[styles.score, { color: scoreColor, fontFamily: fonts.bold }]}>
-            {score}
-          </Text>
-        </View>
-
-        {/* Squadra ospite */}
-        <View style={[styles.teamContainer, { justifyContent: "flex-end" }]}>
+      <View style={styles.row}>
+        {/* Squadra di casa */}
+        <View style={[styles.teamContainer, { justifyContent: "flex-start" }]}>
+          {awayLogo && <Image source={{ uri: awayLogo }} style={styles.logo} />}
           <Text
-            style={[
-              styles.team,
-              { color: colors.text, fontFamily: fonts.medium, textAlign: "right" },
-            ]}
+            style={[styles.team, { color: colors.text, fontFamily: fonts.medium }]}
             numberOfLines={1}
             ellipsizeMode="tail"
           >
             {awayTeam}
           </Text>
-          {awayLogo && <Image source={{ uri: awayLogo }} style={styles.logoRight} />}
         </View>
+        <Text style={[styles.score, { color: scoreColor, fontFamily: fonts.medium }]}>
+          {scoreAway}
+        </Text>
       </View>
 
-
-      {/* Orario o stato match */}
-      {time && (
-        <Text style={[styles.time, { color: timeColor, fontFamily: fonts.regular }]}>
-          {time}
-        </Text>
-      )}
-        <View style={styles.oddsRow}>
-          <Text style={[styles.odd, { color: colors.text }]}>{homeWin ?? "-"}</Text>
-          <Text style={[styles.odd, { color: colors.text }]}>{draw ?? "-"}</Text>
-          <Text style={[styles.odd, { color: colors.text }]}>{awayWin ?? "-"}</Text>
-        </View>
     </View>
   );
 }
@@ -100,8 +92,13 @@ export default function MatchCard({
 const styles = StyleSheet.create({
   card: {
     width: "100%",
+    flexDirection: "column",
+    gap: 8,
     borderRadius: 8,
-    paddingVertical: 16,
+    backgroundColor: Colors.primary,
+    borderWidth: 1,
+    borderColor: Colors.secondary,
+    paddingVertical: 12,
     paddingHorizontal: 16,
   },
   row: {
@@ -109,54 +106,34 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  rowCenter: {
+    width: "100%",
+    paddingVertical: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.text,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8
+  },
   teamContainer: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    maxWidth: "30%",
+    gap: 8,
   },
-  // ✅ logo sinistra → distanza verso destra
-  logoLeft: {
+  logo: {
     width: 24,
     height: 24,
-    borderRadius: 8,
-    marginRight: 8,
-  },
-  // ✅ logo destra → distanza verso sinistra
-  logoRight: {
-    width: 24,
-    height: 24,
-    borderRadius: 8,
-    marginLeft: 8,
   },
   team: {
-    fontSize: 13,
-    flexShrink: 1,
-  },
-  scoreContainer: {
-    width: "40%",
-    alignItems: "center",
+    fontSize: 14,
   },
   score: {
-    fontSize: 18,
+    fontSize: 14,
   },
   time: {
-    marginTop: 4,
-    fontSize: 13,
-    textAlign: "center",
+    fontSize: 12,
   },
-  oddsRow: {
-  flexDirection: "row",
-  justifyContent: "space-between",
-  width: "100%",
-  marginTop: 8,
-},
-odd: {
-  fontSize: 13,
-  textAlign: "center",
-paddingVertical: 4,
-paddingHorizontal: 8,
-borderRadius: 8,
-backgroundColor: Colors.secondary,
-},
 });
