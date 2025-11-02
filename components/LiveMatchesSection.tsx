@@ -20,6 +20,8 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
       const data = await getLiveOrUpcomingMatches(selectedLeague);
       if (data && data.length > 0) {
         setMatches(data);
+      } else {
+        setMatches([]);
       }
     } catch (err) {
       console.error("Errore aggiornamento partite:", err);
@@ -35,8 +37,8 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
   }, [fetchMatches]);
 
   useEffect(() => {
-  const interval = setInterval(fetchMatches, 60000);
-  return () => clearInterval(interval);
+    const interval = setInterval(fetchMatches, 60000);
+    return () => clearInterval(interval);
   }, [fetchMatches]);
 
   return (
@@ -51,24 +53,24 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
       ) : (
         <View style={[{ gap: 16 }]}>
           {matches.length > 0 ? (
-            matches.map((match, idx) => {
-          const status = match?.status;
-          let timeLabel = "";
+            matches.map((match) => {
+              const status = match?.status;
+              let timeLabel = "";
 
-          if (status === "IN_PLAY") {
-            timeLabel = "LIVE";
-          }
-          else if (status === "PAUSED") {
-            timeLabel = "INT.";
-          }
+              if (status === "IN_PLAY") {
+                timeLabel = "LIVE";
+              }
+              else if (status === "PAUSED") {
+                timeLabel = "INT.";
+              }
 
-          let scoreHome = match?.score?.fullTime?.home;
-          let scoreAway = match?.score?.fullTime?.away;
+              let scoreHome = match?.score?.fullTime?.home;
+              let scoreAway = match?.score?.fullTime?.away;
 
-          if (scoreHome === null && scoreAway === null) {
-            scoreHome = "-";
-            scoreAway = "-";
-          }
+              if (scoreHome === null && scoreAway === null) {
+                scoreHome = "-";
+                scoreAway = "-";
+              }
 
               const homeLogo =
                 match?.homeTeam?.crest ||
@@ -80,20 +82,22 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
                 match?.awayTeam?.crestUrl ||
                 "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
 
-              
+
 
               return (
-                <MatchCard
-                  key={`${selectedLeague}-${match?.id ?? idx}`}
-                  homeTeam={match?.homeTeam?.name ?? "—"}
-                  awayTeam={match?.awayTeam?.name ?? "—"}
-                  scoreHome={scoreHome}
-                  scoreAway={scoreAway}
-                  time={timeLabel}
-                  homeLogo={homeLogo}
-                  awayLogo={awayLogo}
-                  
-                />
+                <View key={match?.id} style={[{ marginBottom: 16 }]}>
+                  <MatchCard
+                    key={`${selectedLeague}-${match?.id}`}
+                    idx={match?.id}
+                    homeTeam={match?.homeTeam?.shortName ?? match?.homeTeam?.name}
+                    awayTeam={match?.awayTeam?.shortName ?? match?.awayTeam?.name}
+                    scoreHome={scoreHome}
+                    scoreAway={scoreAway}
+                    time={timeLabel}
+                    homeLogo={homeLogo}
+                    awayLogo={awayLogo}
+                  />
+                </View>
               );
             })
           ) : (

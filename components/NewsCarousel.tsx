@@ -109,7 +109,6 @@ const IMAGE_HEIGHT = width * 0.7 * 9 / 16;
 const styles = StyleSheet.create({
   container: {
     paddingLeft: 16,
-    paddingTop: 16,
   },
   sectionTitle: {
     fontSize: 16,

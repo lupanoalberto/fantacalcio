@@ -31,6 +31,9 @@ export async function getLiveOrUpcomingMatches(leagueName: string) {
     (m: any) => m.status === "IN_PLAY" || m.status === "PAUSED"
   );
 
+  console.log(live);
+  
+
   return live;
   } catch (err) {
     console.error("Errore fetch partite:", err);

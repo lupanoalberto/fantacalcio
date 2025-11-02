@@ -56,10 +56,10 @@ export default function CalendarScreen() {
             marginBottom: 16,
             marginHorizontal: 16,
             height: 64,
-            paddingHorizontal: 8,
             backgroundColor: colors.primary,
             borderWidth: 1,
             borderColor: colors.secondary,
+            overflow: "hidden",
           }}
         >
           <Picker
@@ -69,7 +69,10 @@ export default function CalendarScreen() {
             style={{
               color: colors.text,
               fontFamily: fonts.medium,
+              backgroundColor: colors.primary,
               fontSize: 12,
+              paddingHorizontal: 16,
+              borderRadius: 8,
               width: "100%",
               height: "100%",
             }}
@@ -78,7 +81,7 @@ export default function CalendarScreen() {
           </Picker>
         </View>
 
-        {matchesByMatchday.map((match, idx) => {
+        {matchesByMatchday.map((match) => {
           const status = match?.status;
           const date = new Date(match?.utcDate);
           let timeLabel = "";
@@ -118,11 +121,12 @@ export default function CalendarScreen() {
             "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
 
           return (
-            <View key={idx} style={[{ marginBottom: 16, marginHorizontal: 16, }]}>
+            <View key={match?.id} style={[{ marginBottom: 16, marginHorizontal: 16, }]}>
               <MatchCard
-                key={`${selectedLeague}-${match?.id ?? idx}`}
-                homeTeam={match?.homeTeam?.name ?? "—"}
-                awayTeam={match?.awayTeam?.name ?? "—"}
+                key={`${selectedLeague}-${match?.id}`}
+                idx={match?.id}
+                homeTeam={match?.homeTeam?.shortName ?? match?.homeTeam?.name}
+                awayTeam={match?.awayTeam?.shortName ?? match?.awayTeam?.name}
                 scoreHome={scoreHome}
                 scoreAway={scoreAway}
                 time={timeLabel}

@@ -1,10 +1,12 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useTheme } from "../app/theme";
 import { Colors } from "@/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
+import { Href, useRouter } from "expo-router";
 
 type MatchCardProps = {
+  idx: string;
   homeTeam: string;
   awayTeam: string;
   scoreHome: string;
@@ -15,6 +17,7 @@ type MatchCardProps = {
 };
 
 export default function MatchCard({
+  idx,
   homeTeam,
   awayTeam,
   scoreHome,
@@ -24,6 +27,7 @@ export default function MatchCard({
   awayLogo,
 }: MatchCardProps) {
   const { colors, fonts } = useTheme();
+    const router = useRouter();
 
   // 🔹 Determina il colore in base allo stato
   let scoreColor = colors.text;
@@ -40,7 +44,8 @@ export default function MatchCard({
   }
 
   return (
-    <View style={[styles.card, { backgroundColor: colors.primary }]}>
+    <TouchableOpacity onPress={() => router.push((`../match/${idx}`) as Href)} style={[styles.card, { backgroundColor: colors.primary }]}>
+      
       <View style={styles.row}>
         {/* Orario o stato match */}
         {time && (
@@ -84,8 +89,7 @@ export default function MatchCard({
           {scoreAway}
         </Text>
       </View>
-
-    </View>
+    </TouchableOpacity>
   );
 }
 
