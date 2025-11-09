@@ -40,7 +40,10 @@ export default function CalendarScreen() {
     const options = [];
     for (let i = 1; i <= 38; i++) {
       options.push(
-        <Picker.Item key={i} label={`Giornata ${i}`} value={i} />
+        <Picker.Item key={i} label={`Giornata ${i}`} value={i} style={{
+          fontFamily: fonts.semibold,
+          fontSize: 14,
+        }} />
       );
     }
     return options;
@@ -52,14 +55,15 @@ export default function CalendarScreen() {
         {/* 🔹 Select per scegliere la giornata */}
         <View
           style={{
-            borderRadius: 8,
+            width: "50%",
+            borderRadius: 40,
             marginBottom: 16,
             marginHorizontal: 16,
+            paddingHorizontal: 16,
             height: 64,
             backgroundColor: colors.primary,
             borderWidth: 1,
             borderColor: colors.secondary,
-            overflow: "hidden",
           }}
         >
           <Picker
@@ -68,13 +72,8 @@ export default function CalendarScreen() {
             onValueChange={(value) => setDay(value)}
             style={{
               color: colors.text,
-              fontFamily: fonts.medium,
-              backgroundColor: colors.primary,
-              fontSize: 12,
-              paddingHorizontal: 16,
-              borderRadius: 8,
-              width: "100%",
-              height: "100%",
+              fontFamily: fonts.semibold,
+              fontSize: 14,
             }}
           >
             {renderDayOptions()}

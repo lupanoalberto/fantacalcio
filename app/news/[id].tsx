@@ -54,7 +54,7 @@ export default function NewsDetail({ selectedLeague }: Props) {
         <Text
           style={[
             styles.title,
-            { color: colors.text, fontFamily: fonts.medium },
+            { color: colors.text, fontFamily: fonts.semibold },
           ]}
         >
           {article.title}

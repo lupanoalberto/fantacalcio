@@ -3,6 +3,7 @@ import React, { createContext, useContext, ReactNode, useEffect } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { Colors } from "../constants/colors";
+import { Fonts } from "@/constants/fonts";
 
 // Manteniamo la splash finché non carichiamo i font
 try {
@@ -13,19 +14,15 @@ try {
 
 type Theme = {
   colors: typeof Colors;
-  fonts: {
-    regular: string;
-    medium: string;
-    bold: string;
-  };
+  fonts: typeof Fonts;
 };
 
 const defaultTheme: Theme = {
   colors: Colors,
   fonts: {
-    regular: "Poppins-Regular",
-    medium: "Poppins-Medium",
-    bold: "Poppins-Bold",
+    regular: "Onest-Regular",
+    semibold: "Onest-SemiBold",
+    bold: "Onest-Bold",
   },
 };
 
@@ -35,9 +32,9 @@ export const useTheme = () => useContext(ThemeContext);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [fontsLoaded, fontError] = useFonts({
-    "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-Medium": require("../assets/fonts/Poppins-Medium.ttf"),
-    "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
+    "Onest-Regular": require("../assets/fonts/Onest-Regular.ttf"),
+    "Onest-SemiBold": require("../assets/fonts/Onest-SemiBold.ttf"),
+    "Onest-Bold": require("../assets/fonts/Onest-Bold.ttf"),
   });
 
   useEffect(() => {

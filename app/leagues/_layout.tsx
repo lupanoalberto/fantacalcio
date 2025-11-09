@@ -19,7 +19,7 @@ export default function TabsLayout() {
           height: 60 + insets.bottom, // 👈 aggiungiamo spazio extra
           paddingBottom: insets.bottom + 4, // 👈 così non viene coperta
         },
-        tabBarActiveTintColor: colors.gold,
+        tabBarActiveTintColor: colors.success,
         tabBarInactiveTintColor: colors.textSecondary,
         tabBarLabelStyle: {
           fontFamily: "Poppins_400Regular",
@@ -28,7 +28,7 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="[id]"
         options={{
           title: "Home",
           tabBarIcon: ({ color, size }) => (
@@ -46,20 +46,20 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="help"
+        name="standings"
         options={{
-          title: "Aiuto",
+          title: "Classifica",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="help-circle-outline" color={color} size={size} />
+            <Ionicons name="trophy-outline" color={color} size={size} />
           ),
         }}
       />
       <Tabs.Screen
-        name="account"
+        name="teams"
         options={{
-          title: "Account",
+          title: "Squadre",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" color={color} size={size} />
+            <Ionicons name="shirt-outline" color={color} size={size} />
           ),
         }}
       />

@@ -85,8 +85,8 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
 
 
               return (
-                <View key={match?.id} style={[{ marginBottom: 16 }]}>
-                  <MatchCard
+                <View key={match?.id} style={[{ marginBottom: 16, }]}>
+                    <MatchCard
                     key={`${selectedLeague}-${match?.id}`}
                     idx={match?.id}
                     homeTeam={match?.homeTeam?.shortName ?? match?.homeTeam?.name}
@@ -107,6 +107,7 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
                 fontFamily: fonts.regular,
                 textAlign: "center",
                 fontSize: 12,
+                marginBottom: 16,
               }}
             >
               Nessuna partita in live
@@ -120,5 +121,5 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
 
 const styles = StyleSheet.create({
   container: { width: "100%", paddingHorizontal: 16, },
-  sectionTitle: { fontSize: 16, marginBottom: 4 },
+  sectionTitle: { fontSize: 16, marginBottom: 8 },
 });

@@ -68,7 +68,7 @@ export default function NewsCarousel({ selectedLeague }: Props) {
                 numberOfLines={2}
                 style={[
                   styles.title,
-                  { color: colors.text, fontFamily: fonts.medium },
+                  { color: colors.text, fontFamily: fonts.semibold },
                 ]}
               >
                 {news.title}
@@ -91,7 +91,7 @@ export default function NewsCarousel({ selectedLeague }: Props) {
             style={[styles.button, { borderColor: colors.secondary, backgroundColor: colors.primary, }]}
             activeOpacity={0.8}
           >
-            <Text style={[styles.buttonText, { color: colors.text, fontFamily: fonts.medium }]}>
+            <Text style={[styles.buttonText, { color: colors.text, fontFamily: fonts.semibold }]}>
               Vedi tutte
             </Text>
             <Ionicons name="chevron-forward" size={16} color={colors.text} />
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    marginBottom: 4,
+    marginBottom: 8,
   },
   card: {
     borderRadius: 8,

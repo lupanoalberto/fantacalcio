@@ -36,11 +36,11 @@ export default function MatchCard({
   const normalizedTime = time?.toUpperCase?.() ?? "";
 
   if (normalizedTime.includes("LIVE") || normalizedTime.includes("INT.")) {
-    scoreColor = colors.success; // verde per LIVE
-    timeColor = colors.success;
+    scoreColor = colors.gold; // verde per LIVE
+    timeColor = colors.gold;
   } else if (["POSTPONED", "SUSPENDED", "CANCELLED"].some((w) => normalizedTime.includes(w))) {
     scoreColor = colors.error; // rosso per problemi
-    timeColor = colors.warning; // giallo per sospensione
+    timeColor = colors.error; // giallo per sospensione
   }
 
   return (
@@ -59,16 +59,18 @@ export default function MatchCard({
       <View style={styles.row}>
         {/* Squadra di casa */}
         <View style={[styles.teamContainer, { justifyContent: "flex-start" }]}>
-          {homeLogo && <Image source={{ uri: homeLogo }} style={styles.logo} />}
+          <View style={styles.logoContainer}>
+            {homeLogo && <Image source={{ uri: homeLogo }} style={styles.logo} />}
+          </View>
           <Text
-            style={[styles.team, { color: colors.text, fontFamily: fonts.medium }]}
+            style={[styles.team, { color: colors.text, fontFamily: fonts.semibold }]}
             numberOfLines={1}
             ellipsizeMode="tail"
           >
             {homeTeam}
           </Text>
         </View>
-        <Text style={[styles.score, { color: scoreColor, fontFamily: fonts.medium }]}>
+        <Text style={[styles.score, { color: scoreColor, fontFamily: fonts.semibold }]}>
           {scoreHome}
         </Text>
       </View>
@@ -76,16 +78,18 @@ export default function MatchCard({
       <View style={styles.row}>
         {/* Squadra di casa */}
         <View style={[styles.teamContainer, { justifyContent: "flex-start" }]}>
-          {awayLogo && <Image source={{ uri: awayLogo }} style={styles.logo} />}
+          <View style={styles.logoContainer}>
+            {awayLogo && <Image source={{ uri: awayLogo }} style={styles.logo} />}
+          </View>
           <Text
-            style={[styles.team, { color: colors.text, fontFamily: fonts.medium }]}
+            style={[styles.team, { color: colors.text, fontFamily: fonts.semibold }]}
             numberOfLines={1}
             ellipsizeMode="tail"
           >
             {awayTeam}
           </Text>
         </View>
-        <Text style={[styles.score, { color: scoreColor, fontFamily: fonts.medium }]}>
+        <Text style={[styles.score, { color: scoreColor, fontFamily: fonts.semibold }]}>
           {scoreAway}
         </Text>
       </View>
@@ -126,6 +130,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+  },
+  logoContainer: {
+    padding: 8,
+    backgroundColor: Colors.secondary,
+    borderRadius: 8,
   },
   logo: {
     width: 24,

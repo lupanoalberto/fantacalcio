@@ -106,7 +106,7 @@ export default function MatchDetails() {
             <Text
               style={{
                 color: timeColor,
-                fontFamily: fonts.medium,
+                fontFamily: fonts.semibold,
                 fontSize: 12,
                 textAlign: "center",
               }}
@@ -128,7 +128,7 @@ export default function MatchDetails() {
                 <Text
                   style={{
                     color: colors.text,
-                    fontFamily: fonts.medium,
+                    fontFamily: fonts.semibold,
                     fontSize: 13,
                     textAlign: "center",
                   }}
@@ -158,7 +158,7 @@ export default function MatchDetails() {
                 <Text
                   style={{
                     color: colors.text,
-                    fontFamily: fonts.medium,
+                    fontFamily: fonts.semibold,
                     fontSize: 13,
                     textAlign: "center",
                   }}
@@ -200,7 +200,7 @@ export default function MatchDetails() {
                   style={{
                     color: colors.text,
                     fontSize: 13,
-                    fontFamily: fonts.medium,
+                    fontFamily: fonts.semibold,
                   }}
                 >
                   {e.minute} • {e.team?.name}

@@ -1,9 +1,8 @@
 // app/(tabs)/index.tsx
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
 import { useTheme } from "../theme";
 import Header from "../../components/Header";
-import LeagueCard from "../../components/LeagueCard";
+import ListLeagues from "@/components/ListLeagues"
 import LiveMatchesSection from "@/components/LiveMatchesSection";
 import NewsCarousel from "@/components/NewsCarousel";
 import LeagueSelector from "@/components/LeagueSelector";
@@ -52,27 +51,7 @@ export default function HomeTab() {
             Le tue leghe
           </Text>
 
-          {leaguesFanta.map((league) => (
-            <LeagueCard
-              key={league.id}
-              name={league.name}
-              teamsCount={league.teamsCount}
-              team={league.team}
-              onPress={() => Alert.alert("Lega", `Hai aperto ${league.name}`)}
-            />
-          ))}
-
-          {/* Bottone per aggiungere una nuova lega */}
-          <TouchableOpacity
-            style={[styles.addButton, { borderColor: colors.textSecondary }]}
-            activeOpacity={0.8}
-            onPress={handleAddLeague}
-          >
-            <Ionicons name="add" size={20} color={colors.text} />
-            <Text style={[styles.addButtonText, { color: colors.text, fontFamily: fonts.medium }]}>
-              Aggiungi nuova lega
-            </Text>
-          </TouchableOpacity>
+          <ListLeagues></ListLeagues>
         </View>
 
         <View>
@@ -92,7 +71,7 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   scrollContent: { paddingTop: 8, paddingBottom: 16 },
   section: { width: "100%", padding: 16 },
-  sectionTitle: { fontSize: 16, marginBottom: 4, },
+  sectionTitle: { fontSize: 16, marginBottom: 8, },
   addButton: {
     paddingVertical: 12,
     borderWidth: 1,
