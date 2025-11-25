@@ -14,6 +14,7 @@ type MatchCardProps = {
   time?: string;
   homeLogo?: string;
   awayLogo?: string;
+  matchday?: number;
 };
 
 export default function MatchCard({
@@ -25,9 +26,10 @@ export default function MatchCard({
   time,
   homeLogo,
   awayLogo,
+  matchday,
 }: MatchCardProps) {
   const { colors, fonts } = useTheme();
-    const router = useRouter();
+  const router = useRouter();
 
   // 🔹 Determina il colore in base allo stato
   let scoreColor = colors.text;
@@ -38,60 +40,83 @@ export default function MatchCard({
   if (normalizedTime.includes("LIVE") || normalizedTime.includes("INT.")) {
     scoreColor = colors.gold; // verde per LIVE
     timeColor = colors.gold;
-  } else if (["POSTPONED", "SUSPENDED", "CANCELLED"].some((w) => normalizedTime.includes(w))) {
+  } else if (
+    ["POSTPONED", "SUSPENDED", "CANCELLED"].some((w) =>
+      normalizedTime.includes(w)
+    )
+  ) {
     scoreColor = colors.error; // rosso per problemi
     timeColor = colors.error; // giallo per sospensione
   }
 
   return (
-    <TouchableOpacity onPress={() => router.push((`../match/${idx}`) as Href)} style={[styles.card, { backgroundColor: colors.primary }]}>
-      
-      <View style={styles.row}>
-        {/* Orario o stato match */}
-        {time && (
-          <Text style={[styles.time, { color: timeColor, fontFamily: fonts.regular }]}>
-            {time}
-          </Text>
-        )}
-        <Ionicons name="chevron-forward-outline" color={colors.textSecondary} size={18} />
-      </View>
-
+    <TouchableOpacity
+      style={[styles.card, { backgroundColor: colors.primary }]}
+      onPress={() => router.push(`../match/${idx}` as Href)}
+    >
       <View style={styles.row}>
         {/* Squadra di casa */}
-        <View style={[styles.teamContainer, { justifyContent: "flex-start" }]}>
+        <View style={styles.column}>
           <View style={styles.logoContainer}>
-            {homeLogo && <Image source={{ uri: homeLogo }} style={styles.logo} />}
+            {homeLogo && (
+              <Image source={{ uri: homeLogo }} style={styles.logo} />
+            )}
           </View>
           <Text
-            style={[styles.team, { color: colors.text, fontFamily: fonts.semibold }]}
             numberOfLines={1}
-            ellipsizeMode="tail"
+            style={[
+              styles.team,
+              { color: colors.text, fontFamily: fonts.semibold },
+            ]}
           >
             {homeTeam}
           </Text>
         </View>
-        <Text style={[styles.score, { color: scoreColor, fontFamily: fonts.semibold }]}>
-          {scoreHome}
-        </Text>
-      </View>
-
-      <View style={styles.row}>
-        {/* Squadra di casa */}
-        <View style={[styles.teamContainer, { justifyContent: "flex-start" }]}>
+        <View style={styles.column}>
+          {/* Orario o stato match */}
+          {time && (
+            <Text
+              style={[
+                styles.time,
+                { color: timeColor, fontFamily: fonts.regular },
+              ]}
+            >
+              {time}
+            </Text>
+          )}
+          <Text
+            style={[
+              styles.score,
+              { color: scoreColor, fontFamily: fonts.semibold },
+            ]}
+          >
+            {scoreHome} - {scoreAway}
+          </Text>
+          <Text
+            style={[
+              styles.time,
+              { color: colors.textSecondary, fontFamily: fonts.regular },
+            ]}
+          >
+            Giornata {matchday}
+          </Text>
+        </View>
+        <View style={styles.column}>
           <View style={styles.logoContainer}>
-            {awayLogo && <Image source={{ uri: awayLogo }} style={styles.logo} />}
+            {awayLogo && (
+              <Image source={{ uri: awayLogo }} style={styles.logo} />
+            )}
           </View>
           <Text
-            style={[styles.team, { color: colors.text, fontFamily: fonts.semibold }]}
             numberOfLines={1}
-            ellipsizeMode="tail"
+            style={[
+              styles.team,
+              { color: colors.text, fontFamily: fonts.semibold },
+            ]}
           >
             {awayTeam}
           </Text>
         </View>
-        <Text style={[styles.score, { color: scoreColor, fontFamily: fonts.semibold }]}>
-          {scoreAway}
-        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -102,34 +127,24 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "column",
     gap: 8,
-    borderRadius: 8,
+    borderRadius: 16,
     backgroundColor: Colors.primary,
+    paddingVertical: 12,
+    paddingHorizontal: 32,
     borderWidth: 1,
     borderColor: Colors.secondary,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
   },
   row: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    gap: 16,
   },
-  rowCenter: {
-    width: "100%",
-    paddingVertical: 8,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: Colors.text,
-    flexDirection: "row",
+  column: {
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8
-  },
-  teamContainer: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
+    gap: 4,
   },
   logoContainer: {
     padding: 8,
@@ -137,14 +152,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   logo: {
-    width: 24,
-    height: 24,
+    width: 32,
+    height: 32,
   },
   team: {
-    fontSize: 14,
+    width: 64,
+    fontSize: 12,
+    textAlign: "center",
   },
   score: {
-    fontSize: 14,
+    fontSize: 24,
   },
   time: {
     fontSize: 12,

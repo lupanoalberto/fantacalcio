@@ -49,7 +49,7 @@ export default function Notifications() {
               <Text
                 style={[
                   styles.title,
-                  { color: colors.text, fontFamily: fonts.medium },
+                  { color: colors.text, fontFamily: fonts.semibold },
                 ]}
               >
                 {notif.title}

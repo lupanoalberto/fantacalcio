@@ -75,7 +75,7 @@ export default function HelpPage() {
         Domande frequenti
       </Text>
 
-      <View style={[{ paddingHorizontal: 16, gap: 16, }]}>
+      <View style={[{ paddingHorizontal: 16, gap: 4, }]}>
         {faqs.map((item) => (
           <View
             key={item.id}
@@ -89,7 +89,7 @@ export default function HelpPage() {
               <Text
                 style={[
                   styles.faqQuestion,
-                  { color: colors.text, fontFamily: fonts.medium },
+                  { color: colors.text, fontFamily: fonts.semibold },
                 ]}
               >
                 {item.question}
@@ -125,7 +125,7 @@ export default function HelpPage() {
         Contatti
       </Text>
 
-      <View style={[{ paddingHorizontal: 16, gap: 16, }]}>
+      <View style={[{ paddingHorizontal: 16, gap: 4, }]}>
         <TouchableOpacity
           onPress={() => Linking.openURL("mailto:support@fantacalcioapp.com")}
           activeOpacity={0.8}
@@ -169,7 +169,7 @@ export default function HelpPage() {
         Video tutorial
       </Text>
 
-      <View style={[{ paddingHorizontal: 16, gap: 16, paddingBottom: 16 }]}>
+      <View style={[{ paddingHorizontal: 16, gap: 4, paddingBottom: 16 }]}>
         {videos.map((vid) => (
           <TouchableOpacity
             key={vid.id}
@@ -181,7 +181,7 @@ export default function HelpPage() {
             <Text
               style={[
                 styles.videoTitle,
-                { color: colors.text, fontFamily: fonts.medium },
+                { color: colors.text, fontFamily: fonts.semibold },
               ]}
             >
               {vid.title}
@@ -200,16 +200,16 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    marginBottom: 4,
+    marginBottom: 8,
     paddingHorizontal: 16,
   },
   faqCard: {
     flexDirection: "column",
     alignItems: "center",
-    borderRadius: 8,
+    borderRadius: 16,
     paddingVertical: 12,
     paddingHorizontal: 16,
-    gap: 12,
+    gap: 8,
     borderWidth: 1,
     borderColor: Colors.secondary,
   },
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 8,
+    borderRadius: 16,
     paddingVertical: 12,
     paddingHorizontal: 16,
     gap: 8,

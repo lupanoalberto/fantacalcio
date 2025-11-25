@@ -41,7 +41,7 @@ export default function NewsCarousel({ selectedLeague }: Props) {
         <Text
           style={[
             styles.sectionTitle,
-            { color: colors.text, fontFamily: fonts.bold },
+            { color: colors.text, fontFamily: fonts.bold, marginHorizontal: 16,  },
           ]}
         >
           Notizie dal campo
@@ -50,16 +50,14 @@ export default function NewsCarousel({ selectedLeague }: Props) {
       </View>
 
       {/* CAROSELLO SCORRIBILE */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ gap: 16, paddingRight: 16, alignItems: "center", }}
+      <View
+        style={{ gap: 4, marginHorizontal: 16, alignItems: "center", }}
       >
         {news.map((news, index) => (
           <TouchableOpacity
             key={index}
             activeOpacity={0.85}
-            style={[styles.card, { backgroundColor: colors.primary }]}
+            style={[styles.card, { backgroundColor: colors.primary, borderWidth: 1, borderColor: colors.secondary }]}
             onPress={() => router.push((`/news/${news.id}`) as Href)}
           >
             <Image source={{ uri: news.urlToImage }} style={styles.image} />
@@ -88,7 +86,7 @@ export default function NewsCarousel({ selectedLeague }: Props) {
         <View>
           <TouchableOpacity
             onPress={() => router.push("/news")}
-            style={[styles.button, { borderColor: colors.secondary, backgroundColor: colors.primary, }]}
+            style={[styles.button, { backgroundColor: colors.secondary, }]}
             activeOpacity={0.8}
           >
             <Text style={[styles.buttonText, { color: colors.text, fontFamily: fonts.semibold }]}>
@@ -97,45 +95,43 @@ export default function NewsCarousel({ selectedLeague }: Props) {
             <Ionicons name="chevron-forward" size={16} color={colors.text} />
           </TouchableOpacity>
         </View>
-      </ScrollView>
+      </View>
 
     </View>
   );
 }
 
-const CARD_WIDTH = width * 0.7;
-const IMAGE_HEIGHT = width * 0.7 * 9 / 16;
-
 const styles = StyleSheet.create({
   container: {
-    paddingLeft: 16,
   },
   sectionTitle: {
     fontSize: 16,
     marginBottom: 8,
   },
   card: {
-    borderRadius: 8,
-    overflow: "hidden",
-    width: CARD_WIDTH,
-    borderWidth: 1,
-    borderColor: Colors.secondary,
+    width: "100%",
+    flex: 1,
+    borderRadius: 16,
+    flexDirection: "row",
+    gap: 16,
   },
   image: {
-    width: "100%",
-    height: IMAGE_HEIGHT,
+    width: 120,
+    height: 120,
+    borderRadius: 16,
   },
   textContainer: {
+    width: width - 184,
+    flexDirection: "column",
     paddingVertical: 12,
-    paddingHorizontal: 16,
   },
-  title: { fontSize: 14 },
+  title: { fontSize: 12 },
   excerpt: { fontSize: 12 },
   button: {
+    width: width - 32,
     paddingVertical: 12,
     paddingHorizontal: 16,
-    borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",

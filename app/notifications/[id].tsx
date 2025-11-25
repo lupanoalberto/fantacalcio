@@ -73,7 +73,7 @@ export default function NotificationDetail() {
         <Text
           style={[
             styles.title,
-            { color: colors.text, fontFamily: fonts.medium },
+            { color: colors.text, fontFamily: fonts.semibold },
           ]}
         >
           {notification.title}

@@ -68,8 +68,8 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
               let scoreAway = match?.score?.fullTime?.away;
 
               if (scoreHome === null && scoreAway === null) {
-                scoreHome = "-";
-                scoreAway = "-";
+                scoreHome = "";
+                scoreAway = "";
               }
 
               const homeLogo =
@@ -85,7 +85,7 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
 
 
               return (
-                <View key={match?.id} style={[{ marginBottom: 16, }]}>
+                <View key={match?.id} style={[{ marginBottom: 4, }]}>
                     <MatchCard
                     key={`${selectedLeague}-${match?.id}`}
                     idx={match?.id}
@@ -96,6 +96,7 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
                     time={timeLabel}
                     homeLogo={homeLogo}
                     awayLogo={awayLogo}
+                    matchday={match?.matchday}
                   />
                 </View>
               );

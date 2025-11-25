@@ -42,7 +42,7 @@ export default function CalendarScreen() {
       options.push(
         <Picker.Item key={i} label={`Giornata ${i}`} value={i} style={{
           fontFamily: fonts.semibold,
-          fontSize: 14,
+          fontSize: 12,
         }} />
       );
     }
@@ -55,15 +55,13 @@ export default function CalendarScreen() {
         {/* 🔹 Select per scegliere la giornata */}
         <View
           style={{
-            width: "50%",
-            borderRadius: 40,
-            marginBottom: 16,
+            borderRadius: 16,
+            marginBottom: 4,
+            height: 48,
+            justifyContent: "center",
             marginHorizontal: 16,
             paddingHorizontal: 16,
-            height: 64,
-            backgroundColor: colors.primary,
-            borderWidth: 1,
-            borderColor: colors.secondary,
+            backgroundColor: colors.secondary,
           }}
         >
           <Picker
@@ -73,7 +71,7 @@ export default function CalendarScreen() {
             style={{
               color: colors.text,
               fontFamily: fonts.semibold,
-              fontSize: 14,
+              fontSize: 12,
             }}
           >
             {renderDayOptions()}
@@ -105,8 +103,8 @@ export default function CalendarScreen() {
           let scoreAway = match?.score?.fullTime?.away;
 
           if (scoreHome === null && scoreAway === null) {
-            scoreHome = "-";
-            scoreAway = "-";
+            scoreHome = "";
+            scoreAway = "";
           }
 
           const homeLogo =
@@ -120,7 +118,7 @@ export default function CalendarScreen() {
             "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
 
           return (
-            <View key={match?.id} style={[{ marginBottom: 16, marginHorizontal: 16, }]}>
+            <View key={match?.id} style={[{ marginBottom: 4, marginHorizontal: 16, }]}>
               <MatchCard
                 key={`${selectedLeague}-${match?.id}`}
                 idx={match?.id}
@@ -131,6 +129,7 @@ export default function CalendarScreen() {
                 time={timeLabel}
                 homeLogo={homeLogo}
                 awayLogo={awayLogo}
+                matchday={day}
               />
             </View>
           );

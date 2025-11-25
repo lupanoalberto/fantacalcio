@@ -30,11 +30,11 @@ export default function LeagueSelector({
             key={league}
             onPress={() => onSelect(league)}
             activeOpacity={0.8}
-            style={[styles.button, {backgroundColor: isActive ? colors.secondary : colors.primary,}]}
+            style={[styles.button, {borderColor: isActive ? colors.success : colors.background,}]}
           >
             <Text
               style={{
-                color: isActive ? colors.gold : colors.text,
+                color: isActive ? colors.success : colors.textSecondary,
                 fontFamily: fonts.semibold, fontSize: 12,
               }}
             >
@@ -48,9 +48,9 @@ export default function LeagueSelector({
 }
 
 const styles = StyleSheet.create({
-  content: { marginHorizontal: 16, padding: 4, borderRadius: 40, backgroundColor: Colors.primary, borderWidth: 1, borderColor: Colors.secondary },
+  content: { flex: 1, paddingHorizontal: 16, gap: 16,},
   button: {
-    padding: 16,
-    borderRadius: 40,
+    paddingBottom: 12,
+    borderBottomWidth: 2,
   },
 });

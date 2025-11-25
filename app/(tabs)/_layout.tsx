@@ -19,7 +19,7 @@ export default function TabsLayout() {
           height: 60 + insets.bottom, // 👈 aggiungiamo spazio extra
           paddingBottom: insets.bottom + 4, // 👈 così non viene coperta
         },
-        tabBarActiveTintColor: colors.gold,
+        tabBarActiveTintColor: colors.success,
         tabBarInactiveTintColor: colors.textSecondary,
         tabBarLabelStyle: {
           fontFamily: "Poppins_400Regular",

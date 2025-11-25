@@ -1,8 +1,9 @@
 import { Tabs } from "expo-router";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { useTheme } from "../theme";
+import { useTheme } from "../../../theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 export default function TabsLayout() {
   const { colors } = useTheme();
@@ -28,7 +29,7 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="[id]"
+        name="index"
         options={{
           title: "Home",
           tabBarIcon: ({ color, size }) => (
@@ -37,29 +38,29 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="calendar"
+        name="players"
         options={{
-          title: "Calendario",
+          title: "Giocatori",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar-outline" color={color} size={size} />
+            <Ionicons name="football-outline" color={color} size={size} />
           ),
         }}
       />
       <Tabs.Screen
-        name="standings"
+        name="settings"
         options={{
-          title: "Classifica",
+          title: "Impostazioni",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="trophy-outline" color={color} size={size} />
+            <Ionicons name="settings" color={color} size={size} />
           ),
         }}
       />
       <Tabs.Screen
-        name="teams"
+        name="profile"
         options={{
-          title: "Squadre",
+          title: "Profilo",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="shirt-outline" color={color} size={size} />
+            <MaterialCommunityIcons name="account-circle-outline" size={size} color={color} />
           ),
         }}
       />

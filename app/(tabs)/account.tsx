@@ -21,10 +21,7 @@ export default function AccountPage() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* HEADER */}
-      <Header
-        title="Fantacalcio"
-        showBackArrow={false}
-      />
+      <Header title="Fantacalcio" showBackArrow={false} />
       <ScrollView
         style={styles.container}
         showsVerticalScrollIndicator={false}
@@ -40,31 +37,92 @@ export default function AccountPage() {
           Informazioni personali
         </Text>
 
-        <View style={[styles.card, { backgroundColor: colors.primary, gap: 8, }]}>
-          <View style={styles.row}>
-            <Text style={[styles.label, { color: colors.textSecondary }]}>Nome</Text>
-            <Text style={[styles.value, { color: colors.text }]}>Alberto Lupano</Text>
+        <View style={[{ gap: 4 }]}>
+          <View style={[styles.card, { backgroundColor: colors.primary }]}>
+            <Text
+              style={[
+                {
+                  color: colors.textSecondary,
+                  fontFamily: fonts.regular,
+                  fontSize: 12,
+                },
+              ]}
+            >
+              Nome
+            </Text>
+            <Text
+              style={[
+                {
+                  color: colors.text,
+                  fontFamily: fonts.semibold,
+                  fontSize: 12,
+                },
+              ]}
+            >
+              Alberto Lupano
+            </Text>
           </View>
-
-          <View style={styles.row}>
-            <Text style={[styles.label, { color: colors.textSecondary }]}>Email</Text>
-            <Text style={[styles.value, { color: colors.text }]}>alberto@gmail.com</Text>
+          <View style={[styles.card, { backgroundColor: colors.primary }]}>
+            <Text
+              style={[
+                {
+                  color: colors.textSecondary,
+                  fontFamily: fonts.regular,
+                  fontSize: 12,
+                },
+              ]}
+            >
+              Email
+            </Text>
+            <Text
+              style={[
+                {
+                  color: colors.text,
+                  fontFamily: fonts.semibold,
+                  fontSize: 12,
+                },
+              ]}
+            >
+              lupano.alberto2124@gmail.com
+            </Text>
           </View>
-
-          <View style={styles.row}>
-            <Text style={[styles.label, { color: colors.textSecondary }]}>Password</Text>
-            <Text style={[styles.value, { color: colors.text }]}>********</Text>
+          <View style={[styles.card, { backgroundColor: colors.primary }]}>
+            <Text
+              style={[
+                {
+                  color: colors.textSecondary,
+                  fontFamily: fonts.regular,
+                  fontSize: 12,
+                },
+              ]}
+            >
+              Password
+            </Text>
+            <Text
+              style={[
+                {
+                  color: colors.text,
+                  fontFamily: fonts.semibold,
+                  fontSize: 12,
+                },
+              ]}
+            >
+              ********
+            </Text>
+            
           </View>
-
-          <TouchableOpacity activeOpacity={0.8} style={styles.editButton}>
+          <TouchableOpacity style={styles.editButton} activeOpacity={0.8}>
             <Ionicons name="pencil-outline" size={16} color={colors.success} />
             <Text
-              style={{
-                color: colors.success,
-                fontFamily: fonts.medium,
-                fontSize: 13,
-                marginLeft: 4,
-              }}
+              style={[
+                {
+                  color: colors.success,
+                  fontFamily: fonts.semibold,
+                  fontSize: 12,
+                  alignSelf: "flex-end",
+                  marginRight: 16,
+                },
+              ]}
             >
               Modifica
             </Text>
@@ -75,33 +133,50 @@ export default function AccountPage() {
         <Text
           style={[
             styles.sectionTitle,
-            { color: colors.text, fontFamily: fonts.bold, marginTop: 16 },
+            { color: colors.text, fontFamily: fonts.bold, marginTop: 8 },
           ]}
         >
-          Privacy e permessi
+          Informazioni personali
         </Text>
 
-        <View style={[styles.card, { backgroundColor: colors.primary, }]}>
-          <View style={styles.switchRow}>
-            <Text style={[styles.switchLabel, { color: colors.text }]}>
+        <View style={[{ gap: 4 }]}>
+          <View style={[styles.card, { backgroundColor: colors.primary }]}>
+            <Text
+              style={[
+                {
+                  color: colors.textSecondary,
+                  fontFamily: fonts.regular,
+                  fontSize: 12,
+                },
+              ]}
+            >
               Notifiche push
             </Text>
             <Switch
               value={notificationsEnabled}
               onValueChange={setNotificationsEnabled}
               trackColor={{ false: colors.secondary, true: colors.success }}
+              style={{ padding: 0, margin: 0 }}
               thumbColor={colors.text}
             />
           </View>
-
-          <View style={styles.switchRow}>
-            <Text style={[styles.switchLabel, { color: colors.text }]}>
+          <View style={[styles.card, { backgroundColor: colors.primary }]}>
+            <Text
+              style={[
+                {
+                  color: colors.textSecondary,
+                  fontFamily: fonts.regular,
+                  fontSize: 12,
+                },
+              ]}
+            >
               Condividi dati di utilizzo
             </Text>
             <Switch
-              value={shareData}
-              onValueChange={setShareData}
+              value={notificationsEnabled}
+              onValueChange={setNotificationsEnabled}
               trackColor={{ false: colors.secondary, true: colors.success }}
+              style={{ padding: 0, margin: 0 }}
               thumbColor={colors.text}
             />
           </View>
@@ -117,25 +192,72 @@ export default function AccountPage() {
           Altro
         </Text>
 
-        <View style={[styles.card, { backgroundColor: colors.primary, gap: 16, }]}>
-          <TouchableOpacity activeOpacity={0.8} style={styles.optionRow}>
-            <Ionicons name="document-text-outline" size={18} color={colors.textSecondary} />
-            <Text style={[styles.optionText, { color: colors.text }]}>
+        <View style={[{ gap: 4 }]}>
+          <View
+            style={[
+              styles.card,
+              { backgroundColor: colors.primary, justifyContent: "flex-start" },
+            ]}
+          >
+            <Ionicons
+              name="document-text-outline"
+              size={16}
+              color={colors.text}
+            />
+            <Text
+              style={[
+                {
+                  color: colors.text,
+                  fontFamily: fonts.semibold,
+                  fontSize: 12,
+                },
+              ]}
+            >
               Termini e condizioni
             </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity activeOpacity={0.8} style={styles.optionRow}>
-            <Ionicons name="chatbubble-ellipses-outline" size={18} color={colors.textSecondary} />
-            <Text style={[styles.optionText, { color: colors.text }]}>
-              Invia feedback
+          </View>
+          <View
+            style={[
+              styles.card,
+              { backgroundColor: colors.primary, justifyContent: "flex-start" },
+            ]}
+          >
+            <Ionicons
+              name="chatbubble-ellipses-outline"
+              size={16}
+              color={colors.text}
+            />
+            <Text
+              style={[
+                {
+                  color: colors.text,
+                  fontFamily: fonts.semibold,
+                  fontSize: 12,
+                },
+              ]}
+            >
+              Invia un feedback
             </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity activeOpacity={0.8} style={styles.optionRow}>
-            <Ionicons name="log-out-outline" size={18} color={colors.error} />
-            <Text style={[styles.optionText, { color: colors.error }]}>Esci</Text>
-          </TouchableOpacity>
+          </View>
+          <View
+            style={[
+              styles.card,
+              { backgroundColor: colors.primary, justifyContent: "flex-start" },
+            ]}
+          >
+            <Ionicons name="log-out-outline" size={16} color={colors.error} />
+            <Text
+              style={[
+                {
+                  color: colors.error,
+                  fontFamily: fonts.semibold,
+                  fontSize: 12,
+                },
+              ]}
+            >
+              Esci
+            </Text>
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -148,19 +270,20 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    marginBottom: 4,
+    marginBottom: 8,
     paddingHorizontal: 16,
   },
   card: {
-    flexDirection: "column",
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    borderRadius: 8,
+    borderRadius: 16,
     paddingVertical: 12,
     paddingHorizontal: 16,
     gap: 8,
+    marginHorizontal: 16,
     borderWidth: 1,
     borderColor: Colors.secondary,
-    marginHorizontal: 16,
   },
   row: {
     width: "100%",
@@ -168,16 +291,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  label: {
-    fontSize: 12,
-  },
-  value: {
-    fontSize: 12,
-  },
   editButton: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 8,
+    gap: 8,
     alignSelf: "flex-end",
   },
   switchRow: {
