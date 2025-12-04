@@ -38,8 +38,8 @@ export default function MatchCard({
   const normalizedTime = time?.toUpperCase?.() ?? "";
 
   if (normalizedTime.includes("LIVE") || normalizedTime.includes("INT.")) {
-    scoreColor = colors.gold; // verde per LIVE
-    timeColor = colors.gold;
+    scoreColor = colors.success; // verde per LIVE
+    timeColor = colors.success;
   } else if (
     ["POSTPONED", "SUSPENDED", "CANCELLED"].some((w) =>
       normalizedTime.includes(w)

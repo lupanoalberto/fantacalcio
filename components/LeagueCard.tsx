@@ -29,7 +29,7 @@ export default function LeagueCard({ name, teamsCount, team, onPress }: LeagueCa
       </View>
 
       {team && (
-        <Text style={[styles.detail, { color: colors.success, fontFamily: fonts.medium }]}>
+        <Text style={[styles.detail, { color: colors.success, fontFamily: fonts.semibold }]}>
           {team}
         </Text>
       )}

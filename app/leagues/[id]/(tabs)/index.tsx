@@ -10,15 +10,15 @@ import { useLeagueStore } from "../../../../store/leagueStore";
 import { useLocalSearchParams } from "expo-router";
 import { Colors } from "@/constants/colors";
 import Header from "@/components/Header";
+import PlayerList from "@/components/PlayerList";
 import MenuSelectorLeagues from "@/components/MenuSelectorLeagues";
 import { useTheme } from "../../../theme";
-import { Ionicons } from "@expo/vector-icons";
 
 export default function LeagueDashboardScreen() {
   const { colors, fonts } = useTheme();
   const { id } = useLocalSearchParams();
   const { activeLeague, setActiveLeague } = useLeagueStore();
-    const [isActive, setIsActive] = useState<number>(0);
+  const [isActive, setIsActive] = useState<number>(0);
 
   useEffect(() => {
     setActiveLeague(String(id));
@@ -70,6 +70,19 @@ export default function LeagueDashboardScreen() {
         { name: "Vlahovic", position: "Attaccante", shortP: "A" },
         { name: "Yildiz", position: "Attaccante", shortP: "A" },
       ],
+      bench: [
+        { name: "Carnesecchi", position: "Portiere", shortP: "P" },
+        { name: "Kalulu", position: "Difensore", shortP: "D" },
+        { name: "Valle", position: "Difensore", shortP: "D" },
+        { name: "Carlos Augusto", position: "Difensore", shortP: "D" },
+        { name: "Locatelli", position: "Centrocampista", shortP: "C" },
+        { name: "Koopmeiners", position: "Centrocampista", shortP: "C" },
+        { name: "Gudmundson", position: "Centrocampista", shortP: "C" },
+        { name: "Pasalic", position: "Centrocampista", shortP: "C" },
+        { name: "Morata", position: "Attaccante", shortP: "A" },
+        { name: "Esposito S.", position: "Attaccante", shortP: "A" },
+        { name: "Berardi", position: "Attaccante", shortP: "A" },
+      ],
     },
   ];
 
@@ -85,7 +98,27 @@ export default function LeagueDashboardScreen() {
           </ScrollView>
         </View>
 
+        <Text
+          style={[
+            styles.sectionTitle,
+            { color: colors.text, fontFamily: fonts.semibold, },
+          ]}
+        >
+          Prossima partita
+        </Text>
+
         {/* 🔹 HEADER DEL MATCH */}
+        <View style={{ marginHorizontal: 16, marginBottom: 4, paddingHorizontal: 16, paddingVertical: 12, borderRadius: 16, backgroundColor: colors.secondary, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 16, }}>
+          <Text style={{ flex: 1, color: colors.text, fontFamily: fonts.semibold, fontSize: 12, textAlign: "center", }} numberOfLines={1}>
+            1 giorno
+          </Text>
+          <Text style={{ flex: 1, color: colors.text, fontFamily: fonts.semibold, fontSize: 12, textAlign: "center", }} numberOfLines={1}>
+            8 ore
+          </Text>
+          <Text style={{ flex: 1, color: colors.text, fontFamily: fonts.semibold, fontSize: 12, textAlign: "center", }} numberOfLines={1}>
+            54 min
+          </Text>
+        </View>
         <View
           style={{
             flex: 1,
@@ -216,227 +249,18 @@ export default function LeagueDashboardScreen() {
           </Text>
         </TouchableOpacity>
 
-        <View style={{ flexDirection: "row", gap: 16, margin: 16, }}>
-          <TouchableOpacity
-            onPress={() => setIsActive(0)}
-            activeOpacity={0.8}
-            style={[
-              {
-                borderColor:
-                  isActive === 0 ? colors.success : colors.background,
-                paddingBottom: 12,
-                borderBottomWidth: 2,
-              },
-            ]}
-          >
-            <Text
-              style={{
-                color: isActive === 0 ? colors.success : colors.textSecondary,
-                fontFamily: fonts.semibold,
-                fontSize: 12,
-              }}
-            >
-              AL LEGRI
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setIsActive(1)}
-            activeOpacity={0.8}
-            style={[
-              {
-                borderColor:
-                  isActive === 1 ? colors.success : colors.background,
-                paddingBottom: 12,
-                borderBottomWidth: 2,
-              },
-            ]}
-          >
-            <Text
-              style={{
-                color: isActive === 1 ? colors.success : colors.textSecondary,
-                fontFamily: fonts.semibold,
-                fontSize: 12,
-              }}
-            >
-              Scarsenal
-            </Text>
-          </TouchableOpacity>
+        <Text
+          style={[
+            styles.sectionTitle,
+            { color: colors.text, fontFamily: fonts.semibold, marginTop: 16},
+          ]}
+        >
+          Formazioni
+        </Text>
+
+        <View style={{ flex: 1, gap: 4, marginHorizontal: 16 }}>
+          <PlayerList playersList={lineup}></PlayerList>
         </View>
-
-          <View style={{ flex: 1, gap: 4, marginHorizontal: 16 }}>
-            {lineup[isActive].players.map((line) => (
-              <View
-                key={line.name}
-                style={{
-                  flex: 1,
-                  paddingVertical: 12,
-                  paddingHorizontal: 16,
-                  borderRadius: 16,
-                  backgroundColor: colors.primary,
-                  borderWidth: 1,
-                  borderColor: Colors.secondary,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: 8,
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    gap: 16,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: colors.textSecondary,
-                      fontFamily: fonts.semibold,
-                    }}
-                  >
-                    {line.shortP}
-                  </Text>
-                  <Text
-                    numberOfLines={1}
-                    style={{
-                      fontSize: 12,
-                      color: colors.text,
-                      fontFamily: fonts.semibold,
-                    }}
-                  >
-                    {line.name}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: colors.success,
-                      fontFamily: fonts.semibold,
-                    }}
-                  >
-                    6.5
-                  </Text>
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <View
-                    style={{
-                      padding: 4,
-                      position: "relative",
-                    }}
-                  >
-                    <Ionicons
-                      name="football-outline"
-                      size={16}
-                      color={colors.textSecondary}
-                    />
-                    <Text
-                    style={{
-                      fontSize: 8,
-                      color: colors.primary,
-                      paddingHorizontal: 2,
-                      backgroundColor: colors.success,
-                      borderRadius: 3,
-                      fontFamily: fonts.semibold,
-                      position: "absolute",
-                      top: 0,
-                      right: 0,
-                    }}
-                  >
-                    2
-                  </Text>
-                  </View>
-                  
-                </View>
-              </View>
-            ))}
-          </View>
-
-        <View style={{ marginTop: 16, marginHorizontal: 16 }}>
-          <Text
-            style={[
-              styles.sectionTitle,
-              { color: colors.text, fontFamily: fonts.semibold },
-            ]}
-          >
-            Panchina
-          </Text>
-        </View>
-
-        <View style={{ flex: 1, gap: 4, marginHorizontal: 16, marginBottom: 16 }}>
-            {lineup[isActive].players.map((line) => (
-              <View
-                key={line.name}
-                style={{
-                  flex: 1,
-                  paddingVertical: 12,
-                  paddingHorizontal: 16,
-                  borderRadius: 16,
-                  backgroundColor: colors.primary,
-                  borderWidth: 1,
-                  borderColor: Colors.secondary,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                  gap: 8,
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    gap: 16,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: colors.textSecondary,
-                      fontFamily: fonts.semibold,
-                    }}
-                  >
-                    {line.shortP}
-                  </Text>
-                  <Text
-                    numberOfLines={1}
-                    style={{
-                      fontSize: 12,
-                      color: colors.text,
-                      fontFamily: fonts.semibold,
-                    }}
-                  >
-                    {line.name}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: colors.success,
-                      fontFamily: fonts.semibold,
-                    }}
-                  >
-                    SV
-                  </Text>
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                </View>
-              </View>
-            ))}
-          </View>
       </ScrollView>
     </View>
   );
@@ -450,7 +274,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingBottom: 16,
   },
-  sectionTitle: { fontSize: 12, marginBottom: 8 },
+  sectionTitle: { fontSize: 16, marginBottom: 8, paddingHorizontal: 16 },
   row: {
     flex: 1,
     flexDirection: "row",
