@@ -3,9 +3,12 @@ import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import SerieAIcon from "@/assets/svg/serie-a-logo.svg";
+import PremierLeagueIcon from "@/assets/svg/Premier League_Symbol_0.svg";
+import LaLigaIcon from "@/assets/svg/LaLiga_id5A1pzi0Q_0.svg";
 
 export default function TabsLayout() {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const insets = useSafeAreaInsets(); // 👈 per ottenere il margine inferiore
 
   return (
@@ -22,47 +25,47 @@ export default function TabsLayout() {
         tabBarActiveTintColor: colors.success,
         tabBarInactiveTintColor: colors.textSecondary,
         tabBarLabelStyle: {
-          fontFamily: "Poppins_400Regular",
-          fontSize: 13,
+          fontFamily: fonts.semibold,
+          fontSize: 12,
         },
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="serie-a"
         options={{
-          title: "Home",
+          title: "Serie A",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" color={color} size={size} />
+            <SerieAIcon
+              width={size}
+              height={size}
+              stroke={color}
+              fill={color}
+            />
           ),
         }}
       />
       <Tabs.Screen
-        name="calendar"
+        name="premier-league"
         options={{
-          title: "Calendario",
+          title: "Premier League",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar-outline" color={color} size={size} />
+            <PremierLeagueIcon width={size}
+              height={size}
+              fill={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="help"
+        name="la-liga"
         options={{
-          title: "Aiuto",
+          title: "LaLiga",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="help-circle-outline" color={color} size={size} />
+            <LaLigaIcon width={size}
+              height={size}
+              fill={color} />
           ),
         }}
       />
-      <Tabs.Screen
-        name="account"
-        options={{
-          title: "Account",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" color={color} size={size} />
-          ),
-        }}
-      />
-  </Tabs>
+    </Tabs>
   );
 }

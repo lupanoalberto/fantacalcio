@@ -108,7 +108,6 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
                 fontFamily: fonts.regular,
                 textAlign: "center",
                 fontSize: 12,
-                marginBottom: 16,
               }}
             >
               Nessuna partita in live

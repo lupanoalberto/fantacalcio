@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../app/theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
+import { Colors } from "@/constants/colors";
 
 type HeaderProps = {
   title?: string;
@@ -29,7 +30,6 @@ export default function Header({
       style={[
         styles.container,
         {
-          backgroundColor: colors.background,
           paddingTop: insets.top + 8,
         },
       ]}
@@ -86,6 +86,9 @@ const styles = StyleSheet.create({
     left: 0, 
     right: 0, 
     zIndex: 10,
+    borderBottomWidth: 1,
+    borderColor: Colors.secondary,
+    backgroundColor: Colors.primary,
   },
   leftSection: {
     flexDirection: "row",

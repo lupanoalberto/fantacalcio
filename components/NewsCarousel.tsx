@@ -72,7 +72,7 @@ export default function NewsCarousel({ selectedLeague }: Props) {
                 {news.title}
               </Text>
               <Text
-                numberOfLines={2}
+                numberOfLines={1}
                 style={[
                   styles.excerpt,
                   { color: colors.textSecondary, fontFamily: fonts.regular },
@@ -113,17 +113,17 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 16,
     flexDirection: "row",
+    alignItems: "center",
     gap: 16,
   },
   image: {
-    width: 120,
-    height: 120,
+    width: 80,
+    height: 80,
     borderRadius: 16,
   },
   textContainer: {
     width: width - 184,
     flexDirection: "column",
-    paddingVertical: 12,
   },
   title: { fontSize: 12 },
   excerpt: { fontSize: 12 },

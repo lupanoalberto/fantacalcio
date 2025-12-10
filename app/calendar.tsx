@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, View, ActivityIndicator } from "react-native";
+import { ScrollView, View, ActivityIndicator, Text, StyleSheet } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { getMatches } from "../../services/footballApi";
-import { useTheme } from "../theme";
+import { getMatches } from "../services/footballApi";
+import { useTheme } from "./theme";
 import Header from "@/components/Header";
 import LeagueSelector from "@/components/LeagueSelector";
 import MatchCard from "@/components/MatchCard";
-
-type LeagueName = "Serie A" | "Premier League" | "LaLiga";
+import { useLocalSearchParams } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function CalendarScreen() {
   const { colors, fonts } = useTheme();
-  const [selectedLeague, setSelectedLeague] = useState<LeagueName>("Serie A");
-  const leagues: LeagueName[] = ["Serie A", "Premier League", "LaLiga"];
   const [matchesByMatchday, setMatchesByMatchday] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [day, setDay] = useState<number>(1);
+  const insets = useSafeAreaInsets();
+
+  const { league } = useLocalSearchParams();
+
+  const selectedLeague = league as string;
 
   useEffect(() => {
     const loadMatches = async () => {
@@ -24,7 +27,6 @@ export default function CalendarScreen() {
         let matches = await getMatches(selectedLeague);
         if (matches.length > 0) {
           setMatchesByMatchday(matches.slice(day * 10 - 10, day * 10));
-
         }
       } catch (err) {
         console.error("❌ Errore caricamento calendario:", err);
@@ -40,10 +42,15 @@ export default function CalendarScreen() {
     const options = [];
     for (let i = 1; i <= 38; i++) {
       options.push(
-        <Picker.Item key={i} label={`Giornata ${i}`} value={i} style={{
-          fontFamily: fonts.semibold,
-          fontSize: 12,
-        }} />
+        <Picker.Item
+          key={i}
+          label={`Giornata ${i}`}
+          value={i}
+          style={{
+            fontFamily: fonts.semibold,
+            fontSize: 12,
+          }}
+        />
       );
     }
     return options;
@@ -51,7 +58,7 @@ export default function CalendarScreen() {
 
   const renderMatchdays = () => {
     return (
-      <View key={day} style={{ marginBottom: 0 }}>
+      <View key={day} style={{ marginTop: 16, marginBottom: 0 }}>
         {/* 🔹 Select per scegliere la giornata */}
         <View
           style={{
@@ -85,11 +92,13 @@ export default function CalendarScreen() {
 
           if (status === "IN_PLAY") {
             timeLabel = "LIVE";
-          }
-          else if (status === "PAUSED") {
+          } else if (status === "PAUSED") {
             timeLabel = "INT.";
-          }
-          else if (status === "TIMED" || status === "SCHEDULED" || status === "FINISHED") {
+          } else if (
+            status === "TIMED" ||
+            status === "SCHEDULED" ||
+            status === "FINISHED"
+          ) {
             timeLabel = date.toLocaleString("it-IT", {
               weekday: "short",
               day: "2-digit",
@@ -118,7 +127,10 @@ export default function CalendarScreen() {
             "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
 
           return (
-            <View key={match?.id} style={[{ marginBottom: 4, marginHorizontal: 16, }]}>
+            <View
+              key={match?.id}
+              style={[{ marginBottom: 4, marginHorizontal: 16 }]}
+            >
               <MatchCard
                 key={`${selectedLeague}-${match?.id}`}
                 idx={match?.id}
@@ -133,32 +145,16 @@ export default function CalendarScreen() {
               />
             </View>
           );
-        })
-        }
+        })}
       </View>
-    )
+    );
   };
 
   return (
-    <View
-      style={{ flex: 1, backgroundColor: colors.background, }}
-    >
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       {/* HEADER */}
-      <Header
-        title="Fantacalcio"
-        showBackArrow={false}
-      />
-      <ScrollView
-        style={{ flex: 1, backgroundColor: colors.background, }}
-      >
-
-        <View style={[{ paddingTop: 8, paddingBottom: 16, }]}>
-          <LeagueSelector
-            leagues={leagues}
-            selectedLeague={selectedLeague}
-            onSelect={(league) => setSelectedLeague(league as LeagueName)}
-          />
-        </View>
+      <Header title="Calendario" showBackArrow={true} />
+      <ScrollView style={{ flex: 1, backgroundColor: colors.background, }}>
 
         {loading ? (
           <ActivityIndicator size="large" color={colors.success} />
@@ -166,7 +162,12 @@ export default function CalendarScreen() {
           renderMatchdays()
         )}
 
+        <View style={{ height: insets.bottom + 12, }}></View>
       </ScrollView>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  sectionTitle: { fontSize: 16, },
+});

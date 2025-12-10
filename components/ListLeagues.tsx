@@ -34,35 +34,40 @@ export default function LeaguesListScreen() {
           style={[styles.card, { backgroundColor: colors.primary }]}
           activeOpacity={0.85}
         >
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8, }}>
-            <Text
-            style={[
-              styles.name,
-              { color: colors.success, fontFamily: fonts.semibold },
-            ]}
-          >
-            {item.name}
-          </Text>
-          <Text
-            style={[
-              styles.detail,
-              { color: colors.textSecondary, fontFamily: fonts.regular },
-            ]}
-          >
-            {item.type}
-          </Text>
-          </View>
-          
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8, }}>
-            <View style={{ width: 32, height: 32, borderRadius: 8, backgroundColor: colors.secondary }}></View>
-            <Text
-            style={[
-              styles.name,
-              { color: colors.text, fontFamily: fonts.semibold, fontSize: 14},
-            ]}
-          >
-            Squadra Test
-          </Text>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+            <View
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: 8,
+                backgroundColor: colors.secondary,
+              }}
+            ></View>
+            <View style={{ flex: 1, flexDirection: "column", alignItems: "flex-start", gap: 4, }}>
+              <Text
+                style={[{
+                    color: colors.success,
+                    fontFamily: fonts.semibold,
+                    fontSize: 14,
+                  },
+                ]}
+                numberOfLines={1}
+              >
+                Squadra Test
+              </Text>
+              <Text
+                style={[{
+                    color: colors.textSecondary,
+                    fontFamily: fonts.regular,
+                    fontSize: 12,
+                  },
+                ]}
+                numberOfLines={1}
+              >
+                {item.name}
+              </Text>
+            </View>
+            <Ionicons name="chevron-down" size={16} color={colors.textSecondary} style={{ transform: "rotate(-90deg)", }} />
           </View>
         </TouchableOpacity>
       )}
@@ -97,9 +102,6 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     borderWidth: 1,
     borderColor: Colors.secondary,
-  },
-  name: {
-    fontSize: 12,
   },
   detail: {
     fontSize: 12,
