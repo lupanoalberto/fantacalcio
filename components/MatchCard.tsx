@@ -29,7 +29,6 @@ export default function MatchCard({
   matchday,
 }: MatchCardProps) {
   const { colors, fonts } = useTheme();
-  const router = useRouter();
 
   // 🔹 Determina il colore in base allo stato
   let scoreColor = colors.text;
@@ -50,87 +49,111 @@ export default function MatchCard({
   }
 
   return (
-    <TouchableOpacity
+    <View
       style={[styles.card, { backgroundColor: colors.primary }]}
-      onPress={() => router.push(`../match/${idx}` as Href)}
     >
-      <View style={styles.row}>
-        {/* Squadra di casa */}
-        <View style={styles.column}>
-          <View style={styles.logoContainer}>
-            {homeLogo && (
-              <Image source={{ uri: homeLogo }} style={styles.logo} />
-            )}
-          </View>
-          <Text
-            numberOfLines={1}
-            style={[
-              styles.team,
-              { color: colors.text, fontFamily: fonts.semibold },
-            ]}
-          >
-            {homeTeam}
-          </Text>
+      <View
+        style={{
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <View style={styles.logoContainer}>
+          {homeLogo && <Image source={{ uri: homeLogo }} style={styles.logo} resizeMode="contain" />}
         </View>
-        <View style={styles.column}>
-          {/* Orario o stato match */}
-          {time && (
-            <Text
-              style={[
-                styles.time,
-                { color: timeColor, fontFamily: fonts.regular },
-              ]}
-            >
-              {time}
-            </Text>
-          )}
-          <Text
-            style={[
-              styles.score,
-              { color: scoreColor, fontFamily: fonts.semibold },
-            ]}
-          >
-            {scoreHome} - {scoreAway}
-          </Text>
-          <Text
-            style={[
-              styles.time,
-              { color: colors.textSecondary, fontFamily: fonts.regular },
-            ]}
-          >
-            Giornata {matchday}
-          </Text>
-        </View>
-        <View style={styles.column}>
-          <View style={styles.logoContainer}>
-            {awayLogo && (
-              <Image source={{ uri: awayLogo }} style={styles.logo} />
-            )}
-          </View>
-          <Text
-            numberOfLines={1}
-            style={[
-              styles.team,
-              { color: colors.text, fontFamily: fonts.semibold },
-            ]}
-          >
-            {awayTeam}
-          </Text>
-        </View>
+        <Text
+          style={{
+            color: colors.text,
+            fontFamily: fonts.semibold,
+            fontSize: 14,
+            textAlign: "center",
+            width: 64,
+          }}
+          numberOfLines={1}
+        >
+          {homeTeam}
+        </Text>
       </View>
-    </TouchableOpacity>
+
+      <View
+        style={{
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text
+          style={{
+            color: timeColor,
+            fontFamily: fonts.regular,
+            fontSize: 12,
+            textAlign: "center",
+          }}
+          numberOfLines={1}
+        >
+          {time}
+        </Text>
+        <Text
+          style={{
+            color: scoreColor,
+            fontFamily: fonts.bold,
+            fontSize: 24,
+          }}
+        >
+          {scoreHome} - {scoreAway}
+        </Text>
+        <Text
+          style={{
+            color: colors.textSecondary,
+            fontFamily: fonts.regular,
+            fontSize: 12,
+            textAlign: "center",
+          }}
+          numberOfLines={1}
+        >
+          Giornata {matchday}
+        </Text>
+      </View>
+
+      <View
+        style={{
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <View style={styles.logoContainer}>
+          {awayLogo && <Image source={{ uri: awayLogo }} style={styles.logo} resizeMode="contain" />}
+        </View>
+        <Text
+          style={{
+            color: colors.text,
+            fontFamily: fonts.semibold,
+            fontSize: 14,
+            textAlign: "center",
+            width: 64,
+          }}
+          numberOfLines={1}
+        >
+          {awayTeam}
+        </Text>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    width: "100%",
-    flexDirection: "column",
-    gap: 8,
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     borderRadius: 16,
     backgroundColor: Colors.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 32,
     borderWidth: 1,
     borderColor: Colors.secondary,
   },
@@ -152,8 +175,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   logo: {
-    width: 32,
-    height: 32,
+    width: 40,
+    height: 40,
   },
   team: {
     width: 64,

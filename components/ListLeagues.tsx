@@ -30,7 +30,7 @@ export default function LeaguesListScreen() {
       scrollEnabled={false}
       renderItem={({ item }) => (
         <TouchableOpacity
-          onPress={() => router.push(`/leagues/${item.id}/(tabs)` as Href)}
+          onPress={() => router.push(`/leagues/${item.id}/` as Href)}
           style={[styles.card, { backgroundColor: colors.primary }]}
           activeOpacity={0.85}
         >

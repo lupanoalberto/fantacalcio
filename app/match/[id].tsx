@@ -1,228 +1,258 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ScrollView,
   View,
   Text,
   ActivityIndicator,
-  Image,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
-import { getMatchDetails } from "../../services/footballApi";
+
+import {
+  getMatchDetails,
+  getFixtureEvents,
+  getFixtureLineups,
+  roundToMatchday,
+} from "../../services/footballApi";
 import { useTheme } from "../theme";
 import Header from "@/components/Header";
-import { Colors } from "@/constants/colors";
+import MatchCard from "@/components/MatchCard";
+
+function formatStatusLabel(statusShort?: string, utcDate?: string) {
+  const date = utcDate ? new Date(utcDate) : null;
+
+  // API-FOOTBALL status.short tipici: 1H, 2H, HT, FT, NS, PST, etc.
+  if (statusShort === "1H" || statusShort === "2H" || statusShort === "ET")
+    return "LIVE";
+  if (statusShort === "HT") return "INT.";
+
+  if (!date || Number.isNaN(date.getTime())) return statusShort ?? "—";
+
+  return date.toLocaleString("it-IT", {
+    weekday: "short",
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 
 export default function MatchDetails() {
   const { id } = useLocalSearchParams();
   const { colors, fonts } = useTheme();
-  const [details, setDetails] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [isActive, setIsActive] = useState<number>(0);
 
+  const fixtureId = Number(id);
+
+  const [details, setDetails] = useState<any | null>(null);
+  const [events, setEvents] = useState<any[]>([]);
+  const [lineups, setLineups] = useState<any[]>([]);
+
+  const [loading, setLoading] = useState(true);
+  const [eventsLoading, setEventsLoading] = useState(false);
+  const [lineupsLoading, setLineupsLoading] = useState(false);
+
+  const [isActive, setIsActive] = useState<number>(0);
+  const [error, setError] = useState<string | null>(null);
+
+  // ✅ null-safe memo
+  const fixture = useMemo(() => details?.fixture ?? null, [details]);
+  const teams = useMemo(() => details?.teams ?? null, [details]);
+  const goals = useMemo(() => details?.goals ?? null, [details]);
+  const league = useMemo(() => details?.league ?? null, [details]);
+
+  const timeLabel = useMemo(() => {
+    return formatStatusLabel(fixture?.status?.short, fixture?.date);
+  }, [fixture?.status?.short, fixture?.date]);
+
+  const matchday = useMemo(() => {
+    return roundToMatchday(league?.round ?? null);
+  }, [league?.round]);
+
+  // -------------------------
+  // 1) Load match details
+  // -------------------------
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const data = await getMatchDetails(Number(id));
+        setLoading(true);
+        setError(null);
+        setDetails(null);
+        setEvents([]);
+        setLineups([]);
+
+        if (!Number.isFinite(fixtureId)) {
+          setError("ID match non valido.");
+          return;
+        }
+
+        const data = await getMatchDetails(fixtureId);
+
+        // getMatchDetails (API-FOOTBALL) potrebbe tornare null
+        if (!data) {
+          setError("Dettagli partita non disponibili (API).");
+          return;
+        }
+
         setDetails(data);
-      } catch (err) {
+      } catch (err: any) {
         console.error("❌ Errore caricamento dettagli partita:", err);
+        setError(err?.message ?? "Errore caricamento dettagli partita");
       } finally {
         setLoading(false);
       }
     };
-    fetchDetails();
-  }, [id]);
 
-  if (loading || !details) {
+    fetchDetails();
+  }, [fixtureId]);
+
+  // -------------------------
+  // 2) Load events (tab 0)
+  // -------------------------
+  useEffect(() => {
+    const loadEvents = async () => {
+      try {
+        setEventsLoading(true);
+        const list = await getFixtureEvents(fixtureId);
+        setEvents(Array.isArray(list) ? list : []);
+      } catch (e: any) {
+        console.error("❌ Errore eventi:", e);
+        setEvents([]);
+      } finally {
+        setEventsLoading(false);
+      }
+    };
+
+    if (!Number.isFinite(fixtureId)) return;
+    if (loading) return;
+    if (error) return;
+
+    // carica solo quando apro tab eventi
+    if (isActive === 0) loadEvents();
+  }, [fixtureId, isActive, loading, error]);
+
+  // -------------------------
+  // 3) Load lineups (tab 1)
+  // -------------------------
+  useEffect(() => {
+    const loadLineups = async () => {
+      try {
+        setLineupsLoading(true);
+        const list = await getFixtureLineups(fixtureId);
+        setLineups(Array.isArray(list) ? list : []);
+      } catch (e: any) {
+        console.error("❌ Errore formazioni:", e);
+        setLineups([]);
+      } finally {
+        setLineupsLoading(false);
+      }
+    };
+
+    if (!Number.isFinite(fixtureId)) return;
+    if (loading) return;
+    if (error) return;
+
+    // carica solo quando apro tab formazioni
+    if (isActive === 1) loadLineups();
+  }, [fixtureId, isActive, loading, error]);
+
+  // ✅ Early returns dopo hooks
+  if (loading) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: colors.background,
-        }}
-      >
+      <View style={[styles.center, { backgroundColor: colors.background }]}>
         <ActivityIndicator size="large" color={colors.success} />
       </View>
     );
   }
 
-  const match = details.match ?? details;
-  const events = details.events ?? [];
-  const lineups = details.lineups ?? [];
-
-  const homeTeam = match.homeTeam;
-  const awayTeam = match.awayTeam;
-  const scoreHome = match.score?.fullTime?.home ?? "-";
-  const scoreAway = match.score?.fullTime?.away ?? "-";
-  let status;
-  const matchday = match.matchday;
-
-  // 🔹 Determina il colore in base allo stato
-  let scoreColor = colors.text;
-  let timeColor = colors.textSecondary;
-
-  if (match.status === "IN_PLAY") {
-    status = "LIVE";
-  } else if (match.status === "PAUSED") {
-    status = "INT.";
-  } else {
-    const date = new Date(match?.utcDate);
-    status = date.toLocaleString("it-IT", {
-      weekday: "short",
-      day: "2-digit",
-      month: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+  if (error || !details || !fixture || !teams) {
+    return (
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
+        <Header title="Partita" showBackArrow={true} />
+        <View style={{ padding: 16 }}>
+          <Text style={{ color: colors.text, fontFamily: fonts.bold, fontSize: 16 }}>
+            {error ?? "Impossibile caricare i dettagli della partita."}
+          </Text>
+          <Text
+            style={{
+              color: colors.textSecondary,
+              fontFamily: fonts.regular,
+              fontSize: 13,
+              marginTop: 8,
+            }}
+          >
+            ID: {String(id)}
+          </Text>
+        </View>
+      </View>
+    );
   }
 
-  if (status.includes("LIVE") || status.includes("INT.")) {
-    scoreColor = colors.success; // verde per LIVE
-    timeColor = colors.success;
-  } else if (
-    ["POSTPONED", "SUSPENDED", "CANCELLED"].some((w) => status.includes(w))
-  ) {
-    scoreColor = colors.error; // rosso per problemi
-    timeColor = colors.error; // giallo per sospensione
-  }
+  const homeTeam = teams.home;
+  const awayTeam = teams.away;
+
+  const scoreHome = goals?.home ?? "-";
+  const scoreAway = goals?.away ?? "-";
+
+  const homeLogo =
+    homeTeam?.logo ??
+    "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
+
+  const awayLogo =
+    awayTeam?.logo ??
+    "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
-      {/* HEADER */}
-      <Header title="Fantacalcio" showBackArrow={true} />
+      <Header
+        title={`${homeTeam?.name ?? "Home"} - ${awayTeam?.name ?? "Away"}`}
+        showBackArrow={true}
+      />
 
       <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
-        {/* 🔹 HEADER DEL MATCH */}
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 16,
-            paddingVertical: 12,
-            paddingHorizontal: 16,
-            borderRadius: 16,
-            marginTop: 8,
-            marginBottom: 16,
-            backgroundColor: colors.primary,
-            borderWidth: 1,
-            borderColor: Colors.secondary,
-          }}
+        <Text
+          style={[
+            styles.sectionTitle,
+            { color: colors.text, fontFamily: fonts.bold, marginTop: 16 },
+          ]}
         >
-          <View
-            style={{
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <View style={styles.logoContainer}>
-              {homeTeam.crest && (
-                <Image source={{ uri: homeTeam.crest }} style={styles.logo} />
-              )}
-            </View>
-            <Text
-              style={{
-                color: colors.text,
-                fontFamily: fonts.semibold,
-                fontSize: 13,
-                textAlign: "center",
-                width: 64,
-              }}
-              numberOfLines={1}
-            >
-              {homeTeam.shortName}
-            </Text>
-          </View>
+          Risultato
+        </Text>
 
-          <View
-            style={{
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                color: timeColor,
-                fontFamily: fonts.regular,
-                fontSize: 12,
-                textAlign: "center",
-              }}
-              numberOfLines={1}
-            >
-              {status}
-            </Text>
-            <Text
-              style={{
-                color: scoreColor,
-                fontFamily: fonts.bold,
-                fontSize: 24,
-              }}
-            >
-              {scoreHome} - {scoreAway}
-            </Text>
-            <Text
-              style={{
-                color: colors.textSecondary,
-                fontFamily: fonts.regular,
-                fontSize: 12,
-                textAlign: "center",
-              }}
-              numberOfLines={1}
-            >
-              Giornata {matchday}
-            </Text>
-          </View>
-
-          <View
-            style={{
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <View style={styles.logoContainer}>
-              {awayTeam.crest && (
-                <Image source={{ uri: awayTeam.crest }} style={styles.logo} />
-              )}
-            </View>
-            <Text
-              style={{
-                color: colors.text,
-                fontFamily: fonts.semibold,
-                fontSize: 12,
-                textAlign: "center",
-                width: 64,
-              }}
-              numberOfLines={1}
-            >
-              {awayTeam.shortName}
-            </Text>
-          </View>
+        <View style={{ marginBottom: 16 }}>
+          <MatchCard
+            idx={fixture?.id ?? fixtureId}
+            homeTeam={homeTeam?.name ?? "—"}
+            awayTeam={awayTeam?.name ?? "—"}
+            scoreHome={scoreHome}
+            scoreAway={scoreAway}
+            time={timeLabel}
+            homeLogo={homeLogo}
+            awayLogo={awayLogo}
+            matchday={matchday ?? 0}
+          />
         </View>
 
-        {/* 🔹 SEZIONE EVENTI */}
-        <View style={{ flexDirection: "row", gap: 16, marginBottom: 16 }}>
+        <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.bold }]}>
+          Dettagli partita
+        </Text>
+
+        {/* TAB */}
+        <View style={{ flexDirection: "row", gap: 8, marginBottom: 16 }}>
           <TouchableOpacity
-            onPress={() => setIsActive(0)}
-            activeOpacity={0.8}
             style={[
+              styles.tabBtn,
               {
-                borderColor: isActive === 0 ? colors.success : colors.background,
-                paddingBottom: 12,
-                borderBottomWidth: 2,
+                borderColor: isActive === 0 ? colors.success : colors.secondary,
+                backgroundColor: colors.primary,
               },
             ]}
+            onPress={() => setIsActive(0)}
+            activeOpacity={0.85}
           >
             <Text
               style={{
-                color: isActive === 0 ? colors.success : colors.textSecondary,
+                color: isActive === 0 ? colors.success : colors.text,
                 fontFamily: fonts.semibold,
                 fontSize: 12,
               }}
@@ -230,20 +260,21 @@ export default function MatchDetails() {
               Eventi
             </Text>
           </TouchableOpacity>
+
           <TouchableOpacity
-            onPress={() => setIsActive(1)}
-            activeOpacity={0.8}
             style={[
+              styles.tabBtn,
               {
-                borderColor: isActive === 1 ? colors.success : colors.background,
-                paddingBottom: 12,
-                borderBottomWidth: 2,
+                borderColor: isActive === 1 ? colors.success : colors.secondary,
+                backgroundColor: colors.primary,
               },
             ]}
+            onPress={() => setIsActive(1)}
+            activeOpacity={0.85}
           >
             <Text
               style={{
-                color: isActive === 1 ? colors.success : colors.textSecondary,
+                color: isActive === 1 ? colors.success : colors.text,
                 fontFamily: fonts.semibold,
                 fontSize: 12,
               }}
@@ -253,10 +284,13 @@ export default function MatchDetails() {
           </TouchableOpacity>
         </View>
 
+        {/* CONTENT */}
         {isActive === 0 ? (
-          events.length === 0 ? (
-            <Text style={{ color: colors.textSecondary, fontSize: 13 }}>
-              Nessun evento registrato.
+          eventsLoading ? (
+            <ActivityIndicator size="small" color={colors.success} style={{ marginTop: 6 }} />
+          ) : events.length === 0 ? (
+            <Text style={{ color: colors.textSecondary, fontSize: 12, marginBottom: 24 }}>
+              Nessun evento disponibile.
             </Text>
           ) : (
             events.map((e: any, i: number) => (
@@ -265,45 +299,89 @@ export default function MatchDetails() {
                 style={{
                   borderBottomWidth: 1,
                   borderBottomColor: colors.secondary,
-                  paddingVertical: 6,
+                  paddingVertical: 8,
                 }}
               >
-                <Text
-                  style={{
-                    color: colors.text,
-                    fontSize: 13,
-                    fontFamily: fonts.semibold,
-                  }}
-                >
-                  {e.minute} • {e.team?.name}
+                <Text style={{ color: colors.text, fontSize: 12, fontFamily: fonts.semibold }}>
+                  {(e.time?.elapsed ?? "—")} • {e.team?.name ?? "—"}
                 </Text>
-                <Text style={{ color: colors.textSecondary, fontSize: 13 }}>
-                  {e.type} — {e.player?.name ?? "Giocatore sconosciuto"}
+                <Text style={{ color: colors.textSecondary, fontSize: 12 }}>
+                  {(e.type ?? "Evento")}
+                  {e.detail ? ` — ${e.detail}` : ""}
+                  {e.player?.name ? ` • ${e.player.name}` : ""}
                 </Text>
               </View>
             ))
           )
+        ) : lineupsLoading ? (
+          <ActivityIndicator size="small" color={colors.success} style={{ marginTop: 6 }} />
+        ) : lineups.length === 0 ? (
+          <Text style={{ color: colors.textSecondary, fontSize: 12, marginBottom: 24 }}>
+            Formazioni non disponibili.
+          </Text>
         ) : (
-          lineups.map((lineup: any, index: number) => (
-            <View key={index} style={{ marginBottom: 16 }}>
-              <Text></Text>
+          lineups.map((l: any, idx: number) => (
+            <View key={idx} style={{ marginBottom: 16 }}>
+              <Text style={{ color: colors.text, fontFamily: fonts.bold, fontSize: 14 }}>
+                {l.team?.name ?? "Squadra"}
+              </Text>
+
+              {/* TitolarI (se presenti) */}
+              {Array.isArray(l.startXI) && l.startXI.length > 0 ? (
+                <View style={{ marginTop: 8 }}>
+                  <Text style={{ color: colors.textSecondary, fontFamily: fonts.regular, fontSize: 12 }}>
+                    Titolari
+                  </Text>
+                  {l.startXI.map((p: any, j: number) => (
+                    <Text
+                      key={j}
+                      style={{ color: colors.text, fontFamily: fonts.regular, fontSize: 13, marginTop: 4 }}
+                    >
+                      {p.player?.number ? `${p.player.number}. ` : ""}
+                      {p.player?.name ?? "—"}
+                    </Text>
+                  ))}
+                </View>
+              ) : null}
+
+              {/* Panchina (se presenti) */}
+              {Array.isArray(l.substitutes) && l.substitutes.length > 0 ? (
+                <View style={{ marginTop: 10 }}>
+                  <Text style={{ color: colors.textSecondary, fontFamily: fonts.regular, fontSize: 12 }}>
+                    Panchina
+                  </Text>
+                  {l.substitutes.map((p: any, j: number) => (
+                    <Text
+                      key={j}
+                      style={{ color: colors.text, fontFamily: fonts.regular, fontSize: 13, marginTop: 4 }}
+                    >
+                      {p.player?.number ? `${p.player.number}. ` : ""}
+                      {p.player?.name ?? "—"}
+                    </Text>
+                  ))}
+                </View>
+              ) : null}
             </View>
           ))
         )}
+
+        <View style={{ height: 16 }} />
       </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  logoContainer: {
-    padding: 8,
-    backgroundColor: Colors.secondary,
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  logo: {
-    width: 40,
-    height: 40,
+  center: { flex: 1, justifyContent: "center", alignItems: "center" },
+  sectionTitle: { fontSize: 16, marginBottom: 4, alignSelf: "flex-start" },
+  tabBtn: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 4,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    borderRadius: 40,
   },
 });

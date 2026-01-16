@@ -1,7 +1,7 @@
 // components/Header.tsx
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTheme } from "../app/theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
@@ -30,46 +30,34 @@ export default function Header({
       style={[
         styles.container,
         {
-          paddingTop: insets.top + 8,
+          paddingTop: insets.top + 16,
         },
       ]}
     >
-      <View style={styles.leftSection}>
         {showBackArrow && (
           <TouchableOpacity
-            style={styles.iconButton}
             onPress={() => {
               if (router.canGoBack()) router.back();
               else router.push("/"); // fallback alla home
             }}
-
             activeOpacity={0.7}
           >
-            <Ionicons name="arrow-back-outline" size={22} color={colors.text} />
+            <Ionicons name="arrow-back-outline" size={24} color={colors.text} />
           </TouchableOpacity>
         )}
-        <Text style={[styles.title, { color: colors.text, fontFamily: fonts.bold }]}>
+        <Text
+          style={[styles.title, { flex: 1, color: colors.text, fontFamily: fonts.bold }]}
+          numberOfLines={1}
+        >
           {title}
         </Text>
-      </View>
-
-      <View style={styles.icons}>
-        <TouchableOpacity
-          style={styles.iconButton}
-          onPress={() => router.push("/notifications")}
-          activeOpacity={0.7}
-        >
-          <Ionicons name="notifications-outline" size={24} color={colors.text} />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.iconButton}
-          onPress={onPressShare}
-          activeOpacity={0.7}
-        >
-          <Ionicons name="share-outline" size={24} color={colors.text} />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity onPress={onPressShare} activeOpacity={0.7}>
+        <MaterialCommunityIcons
+          name="account-circle-outline"
+          size={32}
+          color={colors.text}
+        />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -80,29 +68,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 16,
-    paddingBottom: 8,
-    position: "sticky", 
-    top: 0, 
-    left: 0, 
-    right: 0, 
-    zIndex: 10,
-    borderBottomWidth: 1,
-    borderColor: Colors.secondary,
-    backgroundColor: Colors.primary,
+    gap: 16,
   },
   leftSection: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: 16,
   },
   title: {
-    fontSize: 16,
+    fontSize: 24,
   },
   icons: {
     flexDirection: "row",
     gap: 16,
-  },
-  iconButton: {
-    padding: 8,
   },
 });

@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  Alert,
   TouchableOpacity,
 } from "react-native";
 import { useTheme } from "../theme";
@@ -12,8 +11,6 @@ import Header from "../../components/Header";
 import ListLeagues from "@/components/ListLeagues";
 import LiveMatchesSection from "@/components/LiveMatchesSection";
 import NewsCarousel from "@/components/NewsCarousel";
-import LeagueSelector from "@/components/LeagueSelector";
-import { useState } from "react";
 import {
   Entypo,
   FontAwesome5,
@@ -21,13 +18,14 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-
-const CURRENT_LEAGUE = "Serie A";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 export default function HomeTab() {
   const { colors, fonts } = useTheme();
+  const { id } = useLocalSearchParams();
   const router = useRouter();
+
+  const CURRENT_LEAGUE = String(id) || "Serie A";
 
   const goToCalendar = () => {
     router.push({
@@ -36,17 +34,30 @@ export default function HomeTab() {
     });
   };
 
+  const gotToStandings = () => {
+    router.push({
+      pathname: "/standings",
+      params: { league: CURRENT_LEAGUE },
+    });
+  };
+  
+  const gotToPlayers = () => {
+    router.push({
+      pathname: "/players",
+      params: { league: CURRENT_LEAGUE },
+    });
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* HEADER */}
-      <Header title="Fantacalcio" showBackArrow={false} />
+      <Header title={CURRENT_LEAGUE} showBackArrow={true} />
 
       {/* CONTENUTO */}
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-
         <View style={{ marginTop: 16 }}>
           <LiveMatchesSection selectedLeague={CURRENT_LEAGUE} />
         </View>
@@ -58,7 +69,7 @@ export default function HomeTab() {
               { color: colors.text, fontFamily: fonts.bold },
             ]}
           >
-            {CURRENT_LEAGUE}
+            Esplora
           </Text>
 
           <View
@@ -113,7 +124,8 @@ export default function HomeTab() {
                 Calendario
               </Text>
             </TouchableOpacity>
-            <View
+            <TouchableOpacity
+              onPress={gotToStandings}
               style={{
                 flex: 1,
                 flexDirection: "column",
@@ -145,8 +157,9 @@ export default function HomeTab() {
               >
                 Classifica
               </Text>
-            </View>
-            <View
+            </TouchableOpacity>
+            <TouchableOpacity
+            onPress={gotToPlayers}
               style={{
                 flex: 1,
                 flexDirection: "column",
@@ -178,7 +191,7 @@ export default function HomeTab() {
               >
                 Giocatori
               </Text>
-            </View>
+            </TouchableOpacity>
             <View
               style={{
                 flex: 1,
@@ -513,7 +526,7 @@ export default function HomeTab() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  scrollContent: { paddingTop: 8, paddingBottom: 16 },
+  scrollContent: { paddingBottom: 16 },
   section: { width: "100%", paddingHorizontal: 16 },
   sectionTitle: { fontSize: 16, marginBottom: 8 },
   addButton: {

@@ -47,14 +47,6 @@ export default function NewsPage() {
         <View style={[{ marginTop: 16, gap: 16 }]}>
           {news.length > 0 ? (
             news.map((item, index) => {
-              const date = new Date(item.publishedAt);
-              const timeLabel = date.toLocaleString("it-IT", {
-                weekday: "short",
-                day: "2-digit",
-                month: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-              });
               return (
                 <TouchableOpacity
                   key={index}
@@ -69,18 +61,10 @@ export default function NewsPage() {
                       <Text
                         style={[
                           styles.title,
-                          { color: colors.text, fontFamily: fonts.medium },
+                          { color: colors.text, fontFamily: fonts.semibold },
                         ]}
                       >
                         {item.title}
-                      </Text>
-                      <Text
-                        style={[
-                          styles.time,
-                          { color: colors.textSecondary, fontFamily: fonts.regular },
-                        ]}
-                      >
-                        {timeLabel}
                       </Text>
                     </View>
                     <Text

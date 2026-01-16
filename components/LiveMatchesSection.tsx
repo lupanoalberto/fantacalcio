@@ -1,18 +1,20 @@
 // components/LiveMatchesSection.tsx
 import React, { useCallback, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from "react-native";
 import { useTheme } from "../app/theme";
 import MatchCard from "./MatchCard";
 import { getLiveOrUpcomingMatches } from "../services/footballApi";
+import { Href, useRouter } from "expo-router";
 
 type Props = {
   selectedLeague: string;
-}
+};
 
 export default function LiveMatchesSection({ selectedLeague }: Props) {
   const { colors, fonts } = useTheme();
   const [matches, setMatches] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   // ✅ useCallback mantiene stabile la funzione tra i render
   const fetchMatches = useCallback(async () => {
@@ -43,8 +45,12 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
 
   return (
     <View style={styles.container}>
-
-      <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.bold }]}>
+      <Text
+        style={[
+          styles.sectionTitle,
+          { color: colors.text, fontFamily: fonts.bold },
+        ]}
+      >
         Partite in live
       </Text>
 
@@ -59,8 +65,7 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
 
               if (status === "IN_PLAY") {
                 timeLabel = "LIVE";
-              }
-              else if (status === "PAUSED") {
+              } else if (status === "PAUSED") {
                 timeLabel = "INT.";
               }
 
@@ -82,22 +87,28 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
                 match?.awayTeam?.crestUrl ||
                 "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
 
-
-
               return (
-                <View key={match?.id} style={[{ marginBottom: 4, }]}>
+                <View key={match?.id} style={[{ marginBottom: 4 }]}>
+                  <TouchableOpacity
+                    onPress={() => router.push(`../match/${match?.id}` as Href)}
+                  >
                     <MatchCard
-                    key={`${selectedLeague}-${match?.id}`}
-                    idx={match?.id}
-                    homeTeam={match?.homeTeam?.shortName ?? match?.homeTeam?.name}
-                    awayTeam={match?.awayTeam?.shortName ?? match?.awayTeam?.name}
-                    scoreHome={scoreHome}
-                    scoreAway={scoreAway}
-                    time={timeLabel}
-                    homeLogo={homeLogo}
-                    awayLogo={awayLogo}
-                    matchday={match?.matchday}
-                  />
+                      key={`${selectedLeague}-${match?.id}`}
+                      idx={match?.id}
+                      homeTeam={
+                        match?.homeTeam?.shortName ?? match?.homeTeam?.name
+                      }
+                      awayTeam={
+                        match?.awayTeam?.shortName ?? match?.awayTeam?.name
+                      }
+                      scoreHome={scoreHome}
+                      scoreAway={scoreAway}
+                      time={timeLabel}
+                      homeLogo={homeLogo}
+                      awayLogo={awayLogo}
+                      matchday={match.matchday}
+                    />
+                  </TouchableOpacity>
                 </View>
               );
             })
@@ -120,6 +131,6 @@ export default function LiveMatchesSection({ selectedLeague }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: { width: "100%", paddingHorizontal: 16, },
+  container: { width: "100%", paddingHorizontal: 16 },
   sectionTitle: { fontSize: 16, marginBottom: 8 },
 });
