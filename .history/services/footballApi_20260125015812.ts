@@ -69,8 +69,14 @@ export function toApiFootballLeagueId(input: string): number {
  * Free plan spesso limita le stagioni. Per test fissiamo 2024.
  * Quando passi al paid, metti TEST_MODE=false e userà la season corrente.
  */
+const APIFOOTBALL_TEST_MODE = true;
+const APIFOOTBALL_TEST_SEASON = 2024;
+
+// ✅ Free plan: "page" massimo = 3
+const APIFOOTBALL_MAX_PAGE_FREE = 3;
 
 export function getDefaultSeasonYear(date = new Date()) {
+  if (APIFOOTBALL_TEST_MODE) return APIFOOTBALL_TEST_SEASON;
 
   // stagione “di inizio”: es. Gen 2026 -> 2025, Ago 2026 -> 2026
   const y = date.getFullYear();
@@ -527,7 +533,7 @@ export async function getCompetitionPlayers(
   const all: CompetitionPlayer[] = [];
 
   // ✅ Free plan: non possiamo superare page=3.
-  const maxPages = Infinity;
+  const maxPages = APIFOOTBALL_TEST_MODE ? APIFOOTBALL_MAX_PAGE_FREE : Infinity;
 
   let page = 1;
   let totalPages = 1;

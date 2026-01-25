@@ -527,7 +527,7 @@ export async function getCompetitionPlayers(
   const all: CompetitionPlayer[] = [];
 
   // ✅ Free plan: non possiamo superare page=3.
-  const maxPages = Infinity;
+  const maxPages = APIFOOTBALL_TEST_MODE ? APIFOOTBALL_MAX_PAGE_FREE : Infinity;
 
   let page = 1;
   let totalPages = 1;
