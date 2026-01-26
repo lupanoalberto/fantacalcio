@@ -1,0 +1,18 @@
+// components/Header.tsx
+import React from "react";
+import { View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTheme } from "@/theme";
+
+export default function Header() {
+  const { colors, fonts } = useTheme();
+  const insets = useSafeAreaInsets(); // <-- margine superiore dinamico
+
+  return (
+    <View
+      style={{
+        paddingTop: insets.top + 16,
+      }}
+    ></View>
+  );
+}

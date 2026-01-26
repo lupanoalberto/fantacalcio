@@ -1,0 +1,56 @@
+{
+  "expo": {
+    "name": "fantacalcio-app",
+    "slug": "fantacalcio-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "fantacalcioapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "extra": {
+      "FOOTBALL_API_KEY": "b00a7694be194b56b5ef1a09bf9cd15a",
+      "NEWS_API_KEY": "05a35bac92ae4418a1677b953cf4bbcb",
+      "API_FOOTBALL_KEY": "acad964b6fcd59147ef61470af83c7ed",
+      "SUPABASE_URL": "https://zsaokxydllfpzawcibbk.supabase.co",
+      "SUPABASE_ANON_KEY": "uR6xmOJwgm43g_yX2kYSnw_PEv5m72d"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundImage": "./assets/images/android-icon-background.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff",
+          "dark": {
+            "backgroundColor": "#000000"
+          }
+        }
+      ],
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
